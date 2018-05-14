@@ -1,0 +1,134 @@
+#global {
+  background-image: url("../img/rick_wallpaper.png");
+  background-size: cover;
+}
+
+#paddingTop {
+  padding-top: 10px;
+}
+
+.user {
+  display: flex;
+  flex-direction: row-reverse;
+}
+
+.bot {
+  display: flex;
+  flex-direction: row;
+}
+
+.botThinking {
+  display: flex;
+  flex-direction: row;
+}
+
+#dialogDisplay p {
+  width: 70%;
+  margin: 5px;
+  padding: 5px;
+  border-radius: 5px;
+  border-style: solid;
+  border-width: 1px;
+  display: flex;
+  flex-direction: column;
+}
+
+.time {
+  font-style: italic;
+  font-size: 8px;
+}
+
+.user p {
+  background-color: #eee8cd;
+  border-color: red;
+  text-align: right;
+}
+
+.bot p {
+  background-color: #f0fff0;
+  border-color: blue;
+}
+
+.botThinking p {
+  background-color: #eee8cd;
+  border-color: black;
+}
+
+.bot span {
+  width: 100%;
+}
+
+.maps {
+  height:200px;
+}
+
+
+.avatar {
+  height: 50px;
+  width: 50px;
+  border-style: solid;
+  border-radius: 25px;
+  border-width: 1px;
+}
+
+#user {
+  background-image: url("../img/Morty.jpg");
+  border-color: red;
+}
+
+#bot {
+  background-image: url("../img/meseek.jpg");
+  border-color: blue;
+}
+
+#botThinking {
+  background-image: url("../img/meseekthinking.jpg");
+  border-color: blue;
+}
+
+.jumbotron {
+  padding-top: 0px;
+  padding-bottom: 0px;
+  border-radius: 0px;
+  color: #fff;
+  background-color: #222;
+  margin-bottom: 0px;
+}
+
+#dialogBox {
+  margin: 10px;
+}
+
+textarea {
+  resize: none;
+  overflow: hidden;
+}
+
+#dialogDisplay {
+  display: flex;
+  height: 500px;
+  padding:5px;
+  margin-top: 10px;
+  margin-bottom: 10px;
+  border-radius: 5px;
+  overflow: auto;
+  overflow-y: scroll;
+  flex-direction: column-reverse;
+  background-color: rgba(255, 255, 255, 0.5);
+}
+
+#dialogDisplay .user {
+  min-height: min-content;
+}
+
+#dialogDisplay .bot {
+  min-height: min-content;
+}
+
+#dialogDisplay .botThinking {
+  min-height: min-content;
+}
+
+.wordwrap { 
+  word-break : break-all;
+}

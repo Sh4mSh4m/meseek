@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8"> 
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>MeSeek Hieu's bot</title>
+    <meta name="description" content="Look for a place in Rick'n'Morty's multiverse">
+
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet">
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+      <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+    <link rel="stylesheet" href="../static/css/rmstyle.css"/>
+</head>
+
+<body id="global">
+    <header class="jumbotron">
+      <div class="container-fluid text-center">
+        <h4>Welcome to MeSeek bot v1.0</h4>
+      </div>
+    </header>
+    <div class="row">
+      <nav class= "hidden-xs hidden-sm col-md-2">
+        <img id="rick" class="img-circle img-responsive" src="../static/img/rick_base.jpeg" alt="rick_base">
+      </nav>
+      <section id = "chat" class="col-xs-12 col-md-10">
+        <div id ="dialogBox">
+          <div id ="dialogDisplay">
+            <div class="bot">
+              <div class="avatar" id="bot"/></div><p>I'm Mister Meseek, look at me !!! Comment tu t'appelles ? Demande-moi où se trouve un endroit ou si je le connais !!!</p>
+            </div>
+          </div>
+          <form>
+            <div class="form-group">
+              <textarea type="text" id ="dialogInput" class="form-control" rows="2" autofocus="true" placeholder="Press enter to send the request"></textarea>
+            </div>
+            <input type="reset" name="reset" value="Reset" id="reset">
+            <input type="submit" name="submit" value="Send" id="submit">
+          </form>
+
+        </div>  
+      </section>
+    </div>
+    <footer class="row text-center">
+        <p>Author: Hieu TRUONG</p>
+        <a class="col-md-12" href="https://github.com/Sh4mSh4m/OC_project_7">Lien vers le projet</a>
+    </footer>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+    <!-- Javascript de Bootstrap -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+    <script src="../static/js/ajax.js"></script>
+    <script src="../static/js/req.js"></script>
+</body>
+
+</html>
