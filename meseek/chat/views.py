@@ -40,4 +40,5 @@ def mail(request):
         return HttpResponseRedirect(reverse('chat:home'))
     else:
         messages = get_my_messages(access_token)
-        return HttpResponse('Messages: {0}'.format(messages))
+        context = { 'messages': messages['value'] }
+        return render(request, 'chat/mail.html', context)
