@@ -1,3 +1,4 @@
+
 ////////////////////////////////////////////////////////////////
 // DOM selecotrs declaration                                  //
 ////////////////////////////////////////////////////////////////
@@ -14,23 +15,29 @@ function dialogSend(data){
     var data = {
         dialogContent : data
     }
-    ajaxPost("https://myrickbot.herokuapp.com/dialog", data, function (text) {
-      var listData= JSON.parse(text)
-      msg = listData.interaction
-      response = listData.response
-      console.log(response)
-      keyWord = listData.keyWord
-      complement = listData.complement
-      botMsg = displayLogMessage("bot", msg, response, complement);
-      dialogDisplay.insertAdjacentElement("afterbegin", botMsg);
-      imgRickBaseElt = createImgRickBase()
-      setTimeout(function () {
-          var imgRickThinkingElt = document.getElementById('rick')
-          nav.replaceChild(imgRickBaseElt, imgRickThinkingElt)
-          dialogDisplay.removeChild(botThinkingMsg)
-        }, 500)
-    }, true);
+    $.ajax({
+        "type": "POST",
+        "dataType": "json",
+        "url": "http://127.0.0.1:8000/chat/",
+        "data": data,
+        "success": function(text) {
+          msg = text.interaction
+          response = text.response
+          keyWord = text.keyWord
+          complement = text.complement
+          botMsg = displayLogMessage("bot", msg, response, complement);
+          dialogDisplay.insertAdjacentElement("afterbegin", botMsg);
+          //imgRickBaseElt = createImgRickBase()
+          setTimeout(function () {
+              //var imgRickThinkingElt = document.getElementById('rick')
+              //nav.replaceChild(imgRickBaseElt, imgRickThinkingElt)
+              dialogDisplay.removeChild(botThinkingMsg)
+              })
+        },
+        })
 };
+
+
 
 ////////////////////////////////////////////////////////////////
 // Functions that creates HTML elements to display in the log //
@@ -39,19 +46,19 @@ function createImgRickBase () {
     var imgRickBaseElt = document.createElement("img")
     imgRickBaseElt.setAttribute("id", "rick");
     imgRickBaseElt.setAttribute("class", "img-circle img-responsive");
-    imgRickBaseElt.setAttribute("src", "../static/img/rick_base.jpeg");
+    imgRickBaseElt.setAttribute("src", "");
     imgRickBaseElt.setAttribute("alt", "rick_base");
     return imgRickBaseElt
-}
+};
 
 function createImgRickThinking () {
     var imgRickThinkingElt = document.createElement("img")
     imgRickThinkingElt.setAttribute("id", "rick");
     imgRickThinkingElt.setAttribute("class", "img-circle img-responsive");
-    imgRickThinkingElt.setAttribute("src", "../static/img/rick_thinking.jpeg");
+    imgRickThinkingElt.setAttribute("src", "");
     imgRickThinkingElt.setAttribute("alt", "rick_thinking");
     return imgRickThinkingElt
-}
+};
 
 function createTimeStampElt () {
     var date = new Date ()
@@ -80,14 +87,14 @@ function createMapsElt (response) {
     mapsElt.setAttribute('src', src)
     mapsElt.setAttribute('allowFullScreen', '')
     return mapsElt
-}
+};
 
 function createComplementElt (complement) {
     var complementElt = document.createElement("span");
     complementElt.setAttribute("class", "response");
     complementElt.textContent = complement;
     return complementElt
-}
+};
 
 function createAvatarElt (source) {
     var avatarElt = document.createElement("div");
@@ -127,6 +134,11 @@ function displayLogMessage (source, text, response, complement) {
     return msgElt;
 };
 
+//////////////////////////////////////////
+// input control and sending functions  //
+//                                      //
+//////////////////////////////////////////
+
 function checkInput (data) {
     if (typeof data === 'string') {
         return true;
@@ -143,15 +155,17 @@ function sendUsrInput (data) {
     dialogDisplay.insertAdjacentElement('afterbegin', userMsg);
     dialogDisplay.insertAdjacentElement('afterbegin', botThinkingMsg);
     imgRickThinkingElt = createImgRickThinking()
-    var imgRickBaseElt = document.getElementById('rick')
-    nav.replaceChild(imgRickThinkingElt, imgRickBaseElt);
+    //var imgRickBaseElt = document.getElementById('rick')
+    //nav.replaceChild(imgRickThinkingElt, imgRickBaseElt);
     dialogSend(data);
-}
+};
 
 ////////////////////////////////////////////////////////////////
 // Event listeners to submit user input upon clicking submit  //
 // button                                                     //
 ////////////////////////////////////////////////////////////////
+
+
 form.addEventListener("submit", function (e) {
     e.preventDefault();
     data = dialogInput.value;

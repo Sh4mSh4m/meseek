@@ -25,12 +25,12 @@
 <body id="global">
     <header class="jumbotron">
       <div class="container-fluid text-center">
-        <h4>Welcome to MeSeek bot v1.0</h4>
+        <h4>Welcome to MeSeek bot v2.0</h4>
       </div>
     </header>
     <div class="row">
       <nav class= "hidden-xs hidden-sm col-md-2">
-        <img id="rick" class="img-circle img-responsive" src="{% static 'chat/img/rick_base.jpeg' %}" alt="rick_base">
+        <!--img id="rick" class="img-circle img-responsive" src="{% static 'chat/img/rick_base.jpeg' %}" alt="rick_base"-->
       </nav>
       <section id = "chat" class="col-xs-12 col-md-10">
         <div id ="dialogBox">
@@ -40,6 +40,7 @@
             </div>
           </div>
           <form>
+          {% csrf_token %}
             <div class="form-group">
               <textarea type="text" id ="dialogInput" class="form-control" rows="2" autofocus="true" placeholder="Press enter to send the request"></textarea>
             </div>
@@ -52,14 +53,14 @@
     </div>
     <footer class="row text-center">
         <p>Author: Hieu TRUONG</p>
-        <a class="col-md-12" href="https://github.com/Sh4mSh4m/OC_project_7">Lien vers le projet</a>
+        <a class="col-md-12" href="https://github.com/Sh4mSh4m/meseek">Lien vers le projet</a>
     </footer>
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
     <!-- Javascript de Bootstrap -->
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
     <script src="{% static 'chat/js/ajax.js' %}"></script>
-    <script src="{% static 'chat/js/req_localhost.js' %}"></script>
+    <script src="{% static 'chat/js/req.js' %}"></script>
 </body>
 
 </html>

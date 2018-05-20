@@ -1,13 +1,21 @@
 from django.shortcuts import render
-from django.http import HttpResponse, HttpResponseRedirect
+from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
 from django.urls import reverse
 from chat.authhelper import get_signin_url, get_token_from_code, get_access_token
 from chat.outlookservice import get_me, get_my_messages
 import time
-# Create your views here.
-def index(request):
-    return render(request, 'chat/index.html')
 
+
+
+# Main bot view
+def index(request):
+    if request.method == 'GET':
+        return render(request, 'chat/index.html')
+    elif request.method == 'POST':
+        return JsonResponse({'interaction': "Salut Mec", "response":"", "complement":"", "keyWord":""})
+
+
+# OUTLOOK API views
 def home(request):
     redirect_uri = request.build_absolute_uri(reverse('chat:gettoken'))
     sign_in_url = get_signin_url(redirect_uri)

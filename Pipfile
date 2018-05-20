@@ -5,15 +5,9 @@ verify_ssl = true
 name = "pypi"
 
 
-[dev-packages]
-
-
-
 [packages]
 
-requests = "*"
 
 
-[requires]
+[dev-packages]
 
-python_version = "3.5"
