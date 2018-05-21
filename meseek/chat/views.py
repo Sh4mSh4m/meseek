@@ -3,17 +3,33 @@ from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
 from django.urls import reverse
 from chat.authhelper import get_signin_url, get_token_from_code, get_access_token
 from chat.outlookservice import get_me, get_my_messages
+from .f_parser.parser import msgParser
+from .f_chatterbot.chatterbot import Meseek
 import time
 import json
 
 
 # Main bot view
 def index(request):
+    #Initiating chatbots dict, key being userIds
+    chatbots = {}
     if request.method == 'GET':
         return render(request, 'chat/index.html')
     elif request.method == 'POST':
         dataJSON = json.loads(request.body.decode('utf-8'))
-        return JsonResponse({'interaction': dataJSON['rawInput'], "response":"", "complement":"", "keyWord":""})
+        userId = dataJSON['userId']
+        rawMat = dataJSON['rawInput']
+        print(rawMat)
+        print(type(rawMat))
+        try:
+            chatbots[userId]
+        except KeyError:
+            print("i'm here")
+            chatbots[userId] = Meseek(userId)
+        finally:
+            LAreponse = chatbots[userId].get_response(rawMat)
+            print(LAreponse)
+            return JsonResponse({'interaction': str(LAreponse), "response":"", "complement":"", "keyWord":""})
 
 
 # OUTLOOK API views
