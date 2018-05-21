@@ -4,7 +4,7 @@ from django.urls import reverse
 from chat.authhelper import get_signin_url, get_token_from_code, get_access_token
 from chat.outlookservice import get_me, get_my_messages
 import time
-
+import json
 
 
 # Main bot view
@@ -12,7 +12,8 @@ def index(request):
     if request.method == 'GET':
         return render(request, 'chat/index.html')
     elif request.method == 'POST':
-        return JsonResponse({'interaction': "Salut Mec", "response":"", "complement":"", "keyWord":""})
+        dataJSON = json.loads(request.body.decode('utf-8'))
+        return JsonResponse({'interaction': dataJSON['rawInput'], "response":"", "complement":"", "keyWord":""})
 
 
 # OUTLOOK API views

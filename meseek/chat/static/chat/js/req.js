@@ -12,29 +12,35 @@ var nav = document.querySelector("nav");
 // Calling back function to handle response                   //
 ////////////////////////////////////////////////////////////////
 function dialogSend(data){
-    var data = {
-        dialogContent : data
+    //Json sent to the django server
+    // Later on, might include user ID for instance
+    // id recovered in the form as hidden parameter
+    var data2send = {
+        rawInput : data,
+        people : "Hieu"
     }
+    //#charset=utf-8
     $.ajax({
-        "type": "POST",
-        "dataType": "json",
         "url": "http://127.0.0.1:8000/chat/",
-        "data": data,
+        "type": "POST",
+        "contentType": "application/json; #charset=utf-8", 
+        "dataType": "json",
+        "data": JSON.stringify(data2send),
         "success": function(text) {
-          msg = text.interaction
-          response = text.response
-          keyWord = text.keyWord
-          complement = text.complement
-          botMsg = displayLogMessage("bot", msg, response, complement);
-          dialogDisplay.insertAdjacentElement("afterbegin", botMsg);
-          //imgRickBaseElt = createImgRickBase()
-          setTimeout(function () {
-              //var imgRickThinkingElt = document.getElementById('rick')
-              //nav.replaceChild(imgRickBaseElt, imgRickThinkingElt)
-              dialogDisplay.removeChild(botThinkingMsg)
-              })
-        },
-        })
+            msg = text.interaction
+            response = text.response
+            keyWord = text.keyWord
+            complement = text.complement
+            botMsg = displayLogMessage("bot", msg, response, complement);
+            dialogDisplay.insertAdjacentElement("afterbegin", botMsg);
+            //imgRickBaseElt = createImgRickBase()
+            setTimeout(function () {
+                //var imgRickThinkingElt = document.getElementById('rick')
+                //nav.replaceChild(imgRickBaseElt, imgRickThinkingElt)
+                dialogDisplay.removeChild(botThinkingMsg)
+            })
+        }
+    })
 };
 
 
@@ -109,6 +115,12 @@ function createDivElt (source) {
     return divElt
 };
 
+
+///////////////////////////////
+// Displays server response  //
+///////////////////////////////
+
+
 function displayLogMessage (source, text, response, complement) {
     var msgElt = createDivElt(source);
     var msgAvatarElt = createAvatarElt(source)
@@ -149,6 +161,7 @@ function checkInput (data) {
 };
 
 function sendUsrInput (data) {
+    //refreshes the dialogInput form
     dialogInput.value = null;
     userMsg = displayLogMessage('user', data, '', '');
     botThinkingMsg = displayLogMessage('botThinking', "MEEESEEKKK AND DESTROY", '', '');
