@@ -1,12 +1,16 @@
+import time
+import json
+import re
 from django.shortcuts import render
 from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
 from django.urls import reverse
 from chat.authhelper import get_signin_url, get_token_from_code, get_access_token
 from chat.outlookservice import get_me, get_my_messages
 from .f_parser.parser import msgParser
+from .f_parser.questionsProc import questionsProc
+from .f_parser.requestsAPI import getJsonApiWiki
 from .f_chatterbot.chatterbot import Meseek
-import time
-import json
+from .f_reminders.remindsMeOf import remindsMeOf
 
 # Initiating chatbots dict, key being userIds
 # After django app, chatbots are reinitialized
@@ -20,15 +24,37 @@ def index(request):
         dataJSON = json.loads(request.body.decode('utf-8'))
         userId = int(dataJSON['userId'])
         rawMat = dataJSON['rawInput']
-        try:
-            # Parses rawinput
-            botResponse = chatbots[userId].get_response(rawMat)
-        # If the bot doesn't exist yet
-        except KeyError:
+        msgResponse = {'interaction': "",
+                   'complement': "",
+                   'keyWord': "",
+                   'response': "",
+                   'list': ""}
+        parsedBatch = msgParser(rawMat)
+        lstSentences = parsedBatch['sentences']
+        lstQuestions = parsedBatch['questions']
+        # Processes questions
+        if len(lstQuestions) != 0:
+            msgResponse = questionsProc(lstQuestions, msgResponse)
+            if msgResponse['keyWord'] != '':
+                msgResponse['response'] = getJsonApiWiki(msgResponse['keyWord'])
+                if msgResponse['response'] != '':
+                    msgResponse['complement'] = "D'ailleurs, savais-tu que "
+                    msgResponse['complement'] += msgResponse['response']
+            else:
+                msgResponse['complement'] = "Désolé je n'ai rien trouvé"
+        # Processes sentences
+        if userId not in chatbots.keys():
             chatbots[userId] = Meseek(userId)
-            botResponse = chatbots[userId].get_response(rawMat)
-        finally:
-            return JsonResponse({'interaction': str(botResponse), "response":"", "complement":"", "keyWord":""})
+        for sentence in lstSentences:
+            if re.match(r"^/r \S", str(sentence)):
+                match = remindsMeOf(sentence)
+                if match == None:
+                    msgResponse['interaction'] += "Désolé pas de commande correspondante"
+                else:
+                    msgResponse['list'] += match
+            else:    
+                msgResponse['interaction'] += str(chatbots[userId].get_response(sentence))
+        return JsonResponse(msgResponse)
     elif request.method == 'GET':
         return render(request, 'chat/index.html')
 

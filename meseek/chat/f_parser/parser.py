@@ -1,4 +1,10 @@
 #! /usr/bin/env python
+import json
+import codecs
+
+parserDictionnary = json.load(codecs.open("chat/f_parser/parserDictionnary.json",
+                                          "r", "utf-8-sig"))
+
 
 def arraySentencesCleaner(arraySentences):
     return [sentence.strip() for sentence in arraySentences if sentence != '']

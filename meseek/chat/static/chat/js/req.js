@@ -31,7 +31,8 @@ function dialogSend(data){
             response = text.response
             keyWord = text.keyWord
             complement = text.complement
-            botMsg = displayLogMessage("bot", msg, response, complement);
+            list = text.list
+            botMsg = displayLogMessage("bot", msg, response, complement, list);
             dialogDisplay.insertAdjacentElement("afterbegin", botMsg);
             //imgRickBaseElt = createImgRickBase()
             setTimeout(function () {
@@ -83,6 +84,20 @@ function createParagraphElt (text) {
     return paragrapheElt
 };
 
+function createListElt (listContent) {
+    var list = document.createElement("ul");
+    array = listContent.split("\r\n")
+    for (var i = 0; i < array.length; i++) {
+        // Create the list item:
+        var item = document.createElement("li");
+        // Set its contents:
+        item.appendChild(document.createTextNode(array[i]));
+        // Add it to the list:
+        list.appendChild(item);
+    }
+    return list;
+};
+
 function createMapsElt (response) {
     var mapsElt = document.createElement("iframe")
     mapsElt.setAttribute("class", "maps");
@@ -121,7 +136,7 @@ function createDivElt (source) {
 ///////////////////////////////
 
 
-function displayLogMessage (source, text, response, complement) {
+function displayLogMessage (source, text, response, complement, list) {
     var msgElt = createDivElt(source);
     var msgAvatarElt = createAvatarElt(source)
     if (response !== '') {
@@ -129,11 +144,14 @@ function displayLogMessage (source, text, response, complement) {
         msgInputElt.appendChild(createMapsElt(response))
         msgInputElt.appendChild(createComplementElt(complement))
     }
-    else if (source === 'bot' && text === '' && response === '' && complement === '') {
+    else if (source === 'bot' && text === '' && response === '' && complement === '' && list === '') {
         var msgInputElt = createParagraphElt("Désolé je n'ai pas tout compris ! ")
     }
+    else if (source === 'bot' && list !== '') {
+        var msgInputElt = createParagraphElt(text)
+        msgInputElt.appendChild(createListElt(list))
+    }
     else if (source === 'bot' && response === '') {
-        console.log("perdu")
         var msgInputElt = createParagraphElt(text + complement)
     }
     else {

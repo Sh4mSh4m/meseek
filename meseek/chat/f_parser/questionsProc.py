@@ -36,6 +36,6 @@ def questionsProc(lstQuestions, msgResponse):
             if locationAnchor in wordArray:
                 index = wordArray.index(locationAnchor)
                 for i in range(index+1, len(wordArray)):
-                    msgResponse['keyWord'] += wordArray[i] + " "
+                    msgResponse['keyWord'] += wordArray[i] + "%20"
     return msgResponse
     
