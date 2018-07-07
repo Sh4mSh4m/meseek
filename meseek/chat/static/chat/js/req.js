@@ -17,7 +17,7 @@ function dialogSend(data){
     // id recovered in the form as hidden parameter
     var data2send = {
         rawInput : data,
-        userId : 1
+        userId : 10
     }
     //#charset=utf-8
     $.ajax({

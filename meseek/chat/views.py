@@ -8,28 +8,29 @@ from .f_chatterbot.chatterbot import Meseek
 import time
 import json
 
+# Initiating chatbots dict, key being userIds
+# After django app, chatbots are reinitialized
+# Further addons will save bots data into db
+chatbots = {}
 
 # Main bot view
 def index(request):
-    #Initiating chatbots dict, key being userIds
-    chatbots = {}
-    if request.method == 'GET':
-        return render(request, 'chat/index.html')
-    elif request.method == 'POST':
+    if request.method == 'POST':
+        # Retrieves post data
         dataJSON = json.loads(request.body.decode('utf-8'))
-        userId = dataJSON['userId']
+        userId = int(dataJSON['userId'])
         rawMat = dataJSON['rawInput']
-        print(rawMat)
-        print(type(rawMat))
         try:
-            chatbots[userId]
+            # Parses rawinput
+            botResponse = chatbots[userId].get_response(rawMat)
+        # If the bot doesn't exist yet
         except KeyError:
-            print("i'm here")
             chatbots[userId] = Meseek(userId)
+            botResponse = chatbots[userId].get_response(rawMat)
         finally:
-            LAreponse = chatbots[userId].get_response(rawMat)
-            print(LAreponse)
-            return JsonResponse({'interaction': str(LAreponse), "response":"", "complement":"", "keyWord":""})
+            return JsonResponse({'interaction': str(botResponse), "response":"", "complement":"", "keyWord":""})
+    elif request.method == 'GET':
+        return render(request, 'chat/index.html')
 
 
 # OUTLOOK API views
