@@ -72,6 +72,13 @@
   border-width: 1px;
 }
 
+.console {
+  background: #000;
+  border: 3px groove #ccc;
+  color: #ccc;
+  padding: 5px;
+}
+
 #user {
   background-image: url("../img/Morty.jpg");
   border-color: red;

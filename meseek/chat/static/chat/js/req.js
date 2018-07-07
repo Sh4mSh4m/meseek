@@ -85,17 +85,18 @@ function createParagraphElt (text) {
 };
 
 function createListElt (listContent) {
-    var list = document.createElement("ul");
+    var listElt = document.createElement("div");
+    listElt.setAttribute("class", "console");
     array = listContent.split("\r\n")
     for (var i = 0; i < array.length; i++) {
         // Create the list item:
-        var item = document.createElement("li");
+        var item = document.createElement("div");
         // Set its contents:
         item.appendChild(document.createTextNode(array[i]));
         // Add it to the list:
-        list.appendChild(item);
+        listElt.appendChild(item);
     }
-    return list;
+    return listElt;
 };
 
 function createMapsElt (response) {
