@@ -7,7 +7,7 @@ class Meseek(ChatBot):
     DIALOG = [
                  "Salut",
                  "Salut mec !",
-                 "Ca va ?",
+                 "Ca va mec",
                  "OKLM"
                  ]
 

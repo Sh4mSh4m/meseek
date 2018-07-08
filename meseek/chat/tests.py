@@ -1,9 +1,22 @@
-from django.test import TestCase
+import json
+from django.test import TestCase, Client
 from django.urls import reverse
-from selenium import webdriver
-from selenium.webdriver.common.keys import Keys
+from .models import Rappel
 from .f_parser.parser import arraySentencesCleaner, msgParser
-# Create your tests here.
+
+linux = {
+    'id': 1,
+    'name': "linux",
+    'rappel': "Vraiment !\r\nhello" 
+}
+
+def createsRappel(**kwargs):
+    """
+    Create a question with the given `question_text` and published the
+    given number of `days` offset to now (negative for questions published
+    in the past, positive for questions that have yet to be published).
+    """
+    return Rappel.objects.create(**kwargs)
 
 class TestParser(TestCase):
     def setUp(self):
@@ -27,17 +40,6 @@ class TestParser(TestCase):
         self.assertEqual(response['sentences'], resultS)
         self.assertEqual(response['questions'], resultQ)
 
-
-class TestChat(TestCase):
-    def test_index_no_login(self):
-        """
-        If no login, response OK.
-        """
-        response = self.client.get(reverse('chat:index'))
-        self.assertEqual(response.status_code, 200)
-        self.assertContains(response, "Welcome to MeSeek bot v2.0")
-
-
 class webClientTestCase(TestCase):
     """
     Test suite for the django server, verifying it builds up the 
@@ -46,34 +48,32 @@ class webClientTestCase(TestCase):
     """
     @classmethod
     def setUp(cls):
-        cls.driver = webdriver.Chrome()
+        #cls.driver = webdriver.Chrome()
+        rappel = createsRappel(**linux)
 
-    def test_webpage_loads(self):
+    def test_index_no_login(self):
         """
-        Client opens up a firefox, types in the URL and checks that
-        this is the right website
+        If no login, response OK.
         """
-        driver = self.driver
-        self.driver.get('http://localhost:8000/chat')
-        test = driver.find_element_by_id("global")
-        # test = driver.find_element_by_xpath("//p[@id='global']")
-        self.assertIn("Welcome", test.text)
-        # self.assertIn("Rick'n'Morty's multiverse locator", driver.title)#
+        response = self.client.get(reverse('chat:index'))
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, "I'm Mister Meseek")
 
-    def test_webpage_input(self):
-        """
-        Client opens up a firefox, locates the input field, enter text.
-        text appears in the display area
-        """
-        driver = self.driver
-        self.driver.get('http://localhost:8000/chat')
-        chat_input = driver.find_element_by_xpath("//textarea[@id='dialogInput']")
-        chat_input.clear()
-        chat_input.send_keys('some text')
-        chat_input.send_keys(Keys.RETURN)
-        chat_area = driver.find_element_by_id("dialogDisplay")
-        self.assertIn("some text", chat_area.text)
+    def test_chatterbot_dialog(self):
+        json_data = json.dumps({'userId': 1, 'rawInput' : 'Ca va mec'})
+        response = self.client.post(reverse('chat:index'), json_data, content_type='application/json')
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, "OKLM")
+
+    def test_rappel(self):
+        json_data = json.dumps({'userId': 1, 'rawInput' : '/r linux'})
+        response = self.client.post(reverse('chat:index'), json_data, content_type='application/json')
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, "Vraiment")
+        self.assertContains(response, "ello")
+
 
     @classmethod
     def tearDown(cls):
-        cls.driver.quit()
+        #cls.driver.quit()
+        pass
