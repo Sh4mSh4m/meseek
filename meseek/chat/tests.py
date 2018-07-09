@@ -72,6 +72,12 @@ class webClientTestCase(TestCase):
         self.assertContains(response, "Vraiment")
         self.assertContains(response, "ello")
 
+    def test_rappel_non_existing(self):
+        json_data = json.dumps({'userId': 1, 'rawInput' : '/r test'})
+        response = self.client.post(reverse('chat:index'), json_data, content_type='application/json')
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, "correspondante")
+
 
     @classmethod
     def tearDown(cls):
