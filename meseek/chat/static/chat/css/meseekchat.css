@@ -105,6 +105,7 @@
 
 #dialogBox {
   margin: 10px;
+  height: 95vh;
 }
 
 textarea {
@@ -114,7 +115,7 @@ textarea {
 
 #dialogDisplay {
   display: flex;
-  height: 500px;
+  height: 90%;
   padding:5px;
   margin-top: 10px;
   margin-bottom: 10px;
