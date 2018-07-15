@@ -1,0 +1,12 @@
+meseek/chat/f_parser:parser.py
+meseek/chat/f_parser:parserDictionnary.json
+meseek/meseek/__pycache__/
+meseek/meseek/settings.py
+meseek/nohup.out
+meseek/screenie.png
+meseek/test.png
+.DS_Store
+meseek/.DS_Store
+meseek/.coverage
+meseek/chat/.DS_Store
+meseek/db.sqlite3
