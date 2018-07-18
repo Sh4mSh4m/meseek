@@ -21,7 +21,7 @@ function dialogSend(data){
     }
     //#charset=utf-8
     $.ajax({
-        "url": "http://shamnorobotto/chat/",
+        "url": "http://shamnorobotto.live/chat/",
         "type": "POST",
         "contentType": "application/json; #charset=utf-8", 
         "dataType": "json",
