@@ -20,7 +20,8 @@ from . import views
 
 urlpatterns = [
     path('', views.shamnouchi, name='shamnouchi'),
+    path('signup/', views.signup, name='signup'),    
     path('chat/', include('chat.urls')),
-    path('nadeshiko', include('nadeshiko.urls')),
+    path('nadeshiko/', include('nadeshiko.urls')),
     path('adminback/', admin.site.urls),
 ]

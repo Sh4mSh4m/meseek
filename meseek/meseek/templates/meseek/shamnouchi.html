@@ -12,7 +12,11 @@
   
   <body>
   <h1>Welcome to Sham No Robotto homepage</h1>
-  	
+  <p>Let's get you signed up <a href="{% url 'signup' %}">right here</a></p>
+  {% if user.is_authenticated %}
+  <p>You're logged in mate, and you are {{ user.username }} with id {{ user.id }}</p>
+  <p>Now let's head to <a href="{% url 'nadeshiko:index' %}">Nadeshiko</a></p>
+  {% endif %}
   </body>
 
 </html>
