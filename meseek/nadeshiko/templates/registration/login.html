@@ -1,0 +1,44 @@
+{% extends 'nadeshiko/base.html' %}
+
+{% block content %}
+
+    <section class="bg-primary" id="about">
+      <div class="container-fluid p-0">
+        <div class="row">
+          <div class="col-lg-8 mx-auto text-center">
+            <h2 class="section-heading">Authentification</h2>
+            <hr class="light my-4">
+              {% if form.errors %}
+              <p>Votre login et mot de passe ne correspondent pas. Merci de réessayer.</p>
+              {% endif %}
+              {% if next %}
+                  {% if user.is_authenticated %}
+                  <p>Vous n'avez pas accès à cette page. Pour continuer,
+                  merci de vous connecter avec un compte qui a accès.</p>
+                  {% else %}
+                  <p>Merci de vous authentifier pour voir cette page.</p>
+                  {% endif %}
+              {% endif %}
+
+              <form method="post">
+              {% csrf_token %}
+              {{ form.as_p }}
+              <div>
+                <input type="submit" value="login" />
+                <input type="hidden" name="next" value="{{ next }}" />
+              </div>
+              </form>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-lg-8 mx-auto text-center">
+            <h2 class="section-heading">Authentification</h2>
+            <hr class="light my-4">
+            <p><a href="{% url 'signup' %}">Créer votre compte</a></p>
+      </div>
+    </section>
+
+
+
+
+{% endblock %}

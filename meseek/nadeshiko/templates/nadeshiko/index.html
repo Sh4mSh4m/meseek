@@ -1,18 +1,52 @@
-<!DOCTYPE html>
+{% extends 'nadeshiko/base.html' %}
+{% load staticfiles %}
 
-<html>
+{% block content %}
+    <header class="masthead text-center text-white d-flex">
+      <div class="container my-auto">
+        <div class="row">
+          <div class="col-lg-10 mx-auto">
+            <h1 class="text-uppercase">
+              <strong>Ecole de langues et cultures japonaises</strong>
+            </h1>
+            <hr>
+          </div>
+          <div class="col-lg-8 mx-auto">
+            <p class="text-faded mb-5">Inscrivez-vous et révisez votre japonais avec nos quizz !</p>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-lg-12 detail-separator">
+          {% if user.is_authenticated %}
+            <p>Commencez les révisions maintenant en cliquant <a href="{% url 'nadeshiko:hiraganas' %}">ici</a></p>
+          {% else %}
+            <p><a href="{% url 'nadeshiko:login' %}">Enregistrez-vous</a> <a href="{% url 'signup' %}">ou inscrivez-vous !!</a></p>
+          {% endif %}
+          </div>
+        </div>
+      </div>  
+    </header>
 
-  <head>
-    <meta charset="utf-8"> 
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Nadeshiko online class</title>
-    <meta name="description" content="Review your japanese vocabulary">
-  </head>
-  
-  <body>
-  <h1>Hello my young apprentice</h1>
-  	
-  </body>
+    <section class="bg-primary" id="about">
+      <div class="container-fluid p-0">
+        <div class="row">
+          <div class="col-lg-8 mx-auto text-center">
+            <h2 class="section-heading">Nadeshiko</h2>
+            <hr class="light my-4">
+            <p class="text-faded mb-4">ESPACE NADESHIKO est un espace dédié aux cours de Japonais et au partage de la culture du Japon, situé au coeur du 15eme arrondissement de Paris.</p>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-6 mx-auto text-center">
+            <img src="{% static 'nadeshiko/img/nadeshiko.jpg' %}" class="img-fluid" alt="Nadeshiko_ecole">
+            <h4>Ecole Nadeshiko</h4>
+          </div>
+          <div class="col-md-6 mx-auto text-center">
+            <img src="{% static 'nadeshiko/img/cours_nadeshiko.jpg' %}" class="img-fluid" alt="Nadeshiko_cours">
+            <h4>Les cours</h4>
+          </div>
+        </div>
+      </div>
+    </section>
 
-</html>
+{% endblock %}

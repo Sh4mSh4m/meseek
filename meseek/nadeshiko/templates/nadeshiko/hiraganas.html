@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+
+<html>
+
+  <head>
+    <meta charset="utf-8"> 
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Nadeshiko online class</title>
+    <meta name="description" content="Review your japanese vocabulary">
+  </head>
+  
+  <body>
+  <h1>Hiraganas</h1>
+  <ul>
+  {% for hiragana in hiraganas %}
+    <li>{{ hiragana.char_jp }} is {{ hiragana.char_fr }} @ level {{ hiragana.level }}</li>
+  {% endfor %}	
+  </ul>
+  </body>
+
+</html>
