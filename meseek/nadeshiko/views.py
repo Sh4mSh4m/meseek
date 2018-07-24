@@ -9,6 +9,10 @@ from .models import Hiragana, Katakana
 def index(request):
     return render(request, 'nadeshiko/index.html')
 
+def quizz(request):
+    return render(request, 'nadeshiko/quizz.html')
+
+
 def hiraganas(request):
     hiraganas_list = Hiragana.objects.order_by('id')
     return render(request, 'nadeshiko/hiraganas.html', {'hiraganas': hiraganas_list})

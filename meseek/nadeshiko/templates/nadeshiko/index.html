@@ -18,7 +18,7 @@
         <div class="row">
           <div class="col-lg-12 detail-separator">
           {% if user.is_authenticated %}
-            <p>Commencez les révisions maintenant en cliquant <a href="{% url 'nadeshiko:hiraganas' %}">ici</a></p>
+            <p>Commencez les révisions maintenant en cliquant <a href="{% url 'nadeshiko:quizz' %}">ici</a></p>
           {% else %}
             <p><a href="{% url 'nadeshiko:login' %}">Enregistrez-vous</a> <a href="{% url 'signup' %}">ou inscrivez-vous !!</a></p>
           {% endif %}

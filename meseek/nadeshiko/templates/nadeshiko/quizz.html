@@ -1,0 +1,40 @@
+{% extends 'nadeshiko/base.html' %}
+{% load staticfiles %}
+
+{% block content %}
+    <section class="bg-primary" id="about">
+      <div class="container-fluid p-0">
+        <div class="row">
+          <div class="col-lg-8 mx-auto text-center">
+            <h2 class="section-heading">Quizz time</h2>
+            <hr class="light my-4">
+            <p class="text-faded mb-4">Configurez sur la gauche, répondez .</p>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-3 mx-auto text-center">
+            <h4>Bienvenue {{ user.username }}</h4>
+          </div>
+          <div class="col-md-9 mx-auto text-center">
+            <h4>Right</h4>
+            <div class="row">
+              <div class="col-md-6 mx-auto text-center">
+                <p>Question</p>
+              </div>
+              <div class="col-md-6 mx-auto text-center">
+                <p>Reponse</p>
+                  <form>
+                    <div class="form-group">
+                      <textarea type="text" id ="dialogInput" class="form-control" rows="1" autofocus="true" placeholder="Press enter to send the request"></textarea>
+                    </div>
+                    <input type="reset" name="reset" value="Reset" id="reset">
+                    <input type="submit" name="submit" value="Send" id="submit">
+                  </form>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+{% endblock %}
