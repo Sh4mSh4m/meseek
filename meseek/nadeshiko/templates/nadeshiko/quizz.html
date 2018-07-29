@@ -8,30 +8,31 @@
           <div class="col-lg-8 mx-auto text-center">
             <h2 class="section-heading">Quizz time</h2>
             <hr class="light my-4">
-            <p class="text-faded mb-4">Configurez sur la gauche, répondez .</p>
+            <p class="text-faded mb-4">Configurez votre quizz ou commencez directement !</p>
           </div>
         </div>
-        <div class="row">
-          <div class="col-md-3 mx-auto text-center">
-            <h4>Bienvenue {{ user.username }}</h4>
-          </div>
-          <div class="col-md-9 mx-auto text-center">
-            <h4>Right</h4>
-            <div class="row">
-              <div class="col-md-6 mx-auto text-center">
-                <p>Question</p>
-              </div>
-              <div class="col-md-6 mx-auto text-center">
-                <p>Reponse</p>
-                  <form>
-                    <div class="form-group">
-                      <textarea type="text" id ="dialogInput" class="form-control" rows="1" autofocus="true" placeholder="Press enter to send the request"></textarea>
-                    </div>
-                    <input type="reset" name="reset" value="Reset" id="reset">
-                    <input type="submit" name="submit" value="Send" id="submit">
-                  </form>
-              </div>
-            </div>
+        <div id="main" class="row">
+          <div id="info" class="col-md-3 mx-auto text-center">
+            <h4>Bienvenue {{ quizz.user.username }}</h4>
+            <p>Vous êtes au niveau {{ quizz.level }}</p>
+            <p>Ci-après vos précédents scores</p>
+            {% for level, score in quizz.scoreSheet.items %}
+            {% if score  != 0.0 %}
+            <p>niveau {{level}}: moyenne {{score}}</p>
+            {% endif %}
+            {% endfor %}
+          </div> 
+          <div id="configuration" class="col-md-9 mx-auto text-center">
+            <h4>Configuration du quizz</h4>
+            <p>Difficulté du quizz: {{ quizz.size }} questions</p>
+            <form id="theForm">
+              <p>Catégories du quizz:</p>
+              {% for category in quizz.categories %}
+              <p>{{category}}</p>
+              {% endfor %}
+              <input type="reset" name="reset" value="Reset" id="reset">
+              <input type="submit" name="submit" value="Send" id="submit">
+            </form>
           </div>
         </div>
       </div>

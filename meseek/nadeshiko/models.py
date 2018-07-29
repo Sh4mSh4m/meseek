@@ -5,7 +5,7 @@ from django.conf import settings
 class UserJapaneseLevel(models.Model):
     id = models.IntegerField(primary_key=True)
     user = models.ForeignKey(settings.AUTH_USER_MODEL,on_delete=models.CASCADE)
-    scores_level1 = models.CharField(max_length=100, default="0-0-0-0-0")
+    scores_level1 = models.CharField(max_length=100, default="1-0-0-0-0")
     scores_level2 = models.CharField(max_length=100, default="0-0-0-0-0")
     scores_level3 = models.CharField(max_length=100, default="0-0-0-0-0")
 
