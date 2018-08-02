@@ -1,8 +1,6 @@
 ////////////////////////////////////////////////////////////////
 // DOM selectors declaration                                  //
 ////////////////////////////////////////////////////////////////
-var configuration = document.getElementById("configuration");
-var question = document.getElementById("question");
 var main = document.getElementById("main");
 var form = document.getElementById("theForm");
 
@@ -10,36 +8,65 @@ var form = document.getElementById("theForm");
 ////////////////////////////////////////////////////////////////
 // Functions that creates HTML elements to display in the log //
 ////////////////////////////////////////////////////////////////
-
+var quizzIndex = 0
+var question = ''
+console.log('initiating page')
 // Main section
 function createQuizzDiv (questionItem) {
-    var QuestionItemElt = document.createTextNode(questionItem);
-    var AnswerItemElt = document.createTextNode("AnswerForm");
+    // Answer div content with form creation
+    var answerTextArea = document.createElement('input');
+    answerTextArea.setAttribute('type', 'text');
+    answerTextArea.setAttribute('id', 'answerInput');
+    answerTextArea.setAttribute('class', 'form-control');
+    answerTextArea.setAttribute('autofocus', 'true');
+    answerTextArea.setAttribute('placeholder', 'Répondez ici');
+    
+    var answerFormClass = document.createElement('div');
+    answerFormClass.setAttribute('class', 'form-group');
 
-    var quizzQuestionDivElt = document.createElement("div");
-    quizzQuestionDivElt.setAttribute("class", "col-md-6 mx-auto text-center");
-    quizzQuestionDivElt.appendChild(QuestionItemElt);
+    var answerFormDiv = document.createElement('form');
+    answerFormDiv.appendChild(answerFormClass);
+    answerFormDiv.appendChild(answerTextArea);
 
-    var quizzAnswerDivElt = document.createElement("div");
-    quizzAnswerDivElt.setAttribute("class", "col-md-6 mx-auto text-center");
-    quizzAnswerDivElt.appendChild(AnswerItemElt);
+    // Question div content
+    var questionItemElt = document.createTextNode(questionItem);
 
-    var quizzRowElt = document.createElement("div");
-    quizzRowElt.setAttribute("class", "row");
+    var quizzQuestionDivElt = document.createElement('div');
+    quizzQuestionDivElt.setAttribute('class', 'col-md-6 mx-auto text-center');
+    quizzQuestionDivElt.appendChild(questionItemElt);
+
+    var quizzAnswerDivElt = document.createElement('div');
+    quizzQuestionDivElt.setAttribute('id', 'questionDiv');
+    quizzAnswerDivElt.setAttribute('class', 'col-md-6 mx-auto text-center');
+    quizzAnswerDivElt.appendChild(answerFormDiv);
+
+    var quizzRowElt = document.createElement('div');
+    quizzRowElt.setAttribute('class', 'row');
+    quizzRowElt.setAttribute('id', 'questionRow');
     quizzRowElt.appendChild(quizzQuestionDivElt);
     quizzRowElt.appendChild(quizzAnswerDivElt);
 
     var Title = document.createTextNode("A vous de jouer !");
-    var quizzTitle = document.createElement("h4");
+    var quizzTitle = document.createElement('h4');
     quizzTitle.appendChild(Title)
 
-    var quizzDivElt = document.createElement("div");
-    quizzDivElt.setAttribute("class", "col-md-9 mx-auto text-center");
-    quizzDivElt.setAttribute("id", "question");
+    var quizzDivElt = document.createElement('div');
+    quizzDivElt.setAttribute('class', 'col-md-9 mx-auto text-center');
+    quizzDivElt.setAttribute('id', "question");
     quizzDivElt.appendChild(quizzTitle);
     quizzDivElt.appendChild(quizzRowElt);
     return quizzDivElt;
-}
+};
+
+function createNewQuizzElt (questionItem) {
+    var questionItemElt = document.createTextNode(questionItem);
+
+    var quizzQuestionDivElt = document.createElement('div');
+    quizzQuestionDivElt.setAttribute('id', 'questionDiv');
+    quizzQuestionDivElt.setAttribute('class', 'col-md-6 mx-auto text-center');
+    quizzQuestionDivElt.appendChild(questionItemElt);    
+    return quizzQuestionDivElt
+};
 
 function ajaxSend(MsgClient){
     console.log("i'm in")
@@ -50,15 +77,17 @@ function ajaxSend(MsgClient){
         "dataType": "json",
         "data": JSON.stringify(MsgClient),
         "success": function(MsgServer) {
+            console.log(MsgServer)
             quizzQuestion = MsgServer.quizzQuestion
             quizzIndex = MsgServer.quizzIndex
-            question = createQuizzDiv(quizzQuestion)
-            if (quizzIndex !== 0) {
+            var configuration = document.getElementById("configuration");
+            if (configuration !== null) {
+                question = createQuizzDiv(quizzQuestion)
                 main.replaceChild(question, configuration)
             }
             else {
-              console.log("not done yet")
-            }            
+                document.getElementById("questionDiv").innerHTML = quizzQuestion
+            }          
         }
     })
 };
@@ -69,21 +98,27 @@ function ajaxSend(MsgClient){
 form.addEventListener("submit", function (e) {
     e.preventDefault();
     var MsgClient = {
-        "answer": "Caca",
+        "index": quizzIndex,
+        "answer": {},
         "reinitRequest": false,
         "settings": {
             "level": 1,
             "quizzLength": 10,
             }
         };
-    console.log('sending shit')
     ajaxSend(MsgClient);
 });
 
-configuration.addEventListener('keypress', function(e) {
-    if (e.keyCode === 13) {
+
+main.addEventListener('keypress', function (e) {
+    var answerForm = document.getElementById("answerInput")
+    if (e.keyCode === 13 && answerForm.value !== '') {
+        quizzAnswer = answerForm.value.toUpperCase()
+        answerForm.value = ''
+        answer = {"jp": quizzQuestion, "fr": quizzAnswer}
         var MsgClient = {
-            "answer": Caca,
+            "index": quizzIndex,
+            "answer": answer,
             "reinitRequest": false,
             "settings": {
                 "level": 1,
@@ -91,5 +126,33 @@ configuration.addEventListener('keypress', function(e) {
                 }
             };
         ajaxSend(MsgClient);
-        }        e.preventDefault();   
+    }
+    else {
+        answerForm.value += String.fromCharCode(e.keyCode)
+    }
+    e.preventDefault(); 
 });
+
+
+//main.addEventListener('keypress', check)
+
+//function check (e) {
+//    if (e.target && e.target.id == "answerInput") {
+//        var answerForm = document.getElementById("answerInput")
+//        if (e.keyCode === 13 && answerForm.value !== '') {
+//            quizzAnswer = answerForm.value.toUpperCase()
+//            answer = {"jp": quizzQuestion, "fr": quizzAnswer}
+//            var MsgClient = {
+//                "index": quizzIndex,
+//                "answer": answer,
+//                "reinitRequest": false,
+//                "settings": {
+//                    "level": 1,
+//                    "quizzLength": 10,
+//                    }
+//                };
+//            ajaxSend(MsgClient);
+//            }
+//    }       e.preventDefault(); 
+//};
+

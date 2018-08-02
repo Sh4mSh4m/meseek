@@ -22,25 +22,30 @@ def quizz(request):
         quizz = Quizz(user)
         QUIZZ_INDEX[user.id] = quizz
     finally:
+        print("Voilà le lot de questions: {}".format(quizz.questions))
         if request.method == 'POST':
-            print("hey i hear you")
             # Retrieves post data
             dataJSON = json.loads(request.body.decode('utf-8'))
             answer = dataJSON['answer']
-            print(answer)
+            answerIndex = dataJSON['index']
+            quizz.answers[answerIndex] = answer
+            quizz.index = quizz.currentIndex()
+            print("Current index is {}".format(quizz.index))
+            print("Tes réponses sont {}".format(quizz.answers))
             msgServer = {
                 "userInfo":
                     {
-                    "level": 1,
-                    "scores": 0,
+                    "level": quizz.level,
+                    "scores": quizz.scoreSheet,
                     },
-                "quizzIndex": 1,
-                "quizzQuestion": quizz.questions[1],
-                "quizzLength": 10,
+                "quizzIndex": quizz.index,
+                "quizzQuestion": quizz.questions[quizz.index]['jp'],
+                "quizzLength": quizz.size,
                 "reinitConfirmation": False,
                 "completion": False,
                 "score": 0,
             }
+            print(msgServer)
             return JsonResponse(msgServer)
         else:
             return render(request, 'nadeshiko/quizz.html', {'quizz': quizz})

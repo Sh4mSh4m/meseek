@@ -18,7 +18,8 @@
             <p>Ci-après vos précédents scores</p>
             {% for level, score in quizz.scoreSheet.items %}
             {% if score  != 0.0 %}
-            <p>niveau {{level}}: moyenne {{score}}</p>
+            <p>niveau 
+            {{level}}: moyenne {{score}}</p>
             {% endif %}
             {% endfor %}
           </div> 
@@ -26,10 +27,9 @@
             <h4>Configuration du quizz</h4>
             <p>Difficulté du quizz: {{ quizz.size }} questions</p>
             <form id="theForm">
-              <p>Catégories du quizz:</p>
-              {% for category in quizz.categories %}
-              <p>{{category}}</p>
-              {% endfor %}
+              {% csrf_token %}
+              <p>Catégories du quizz:{% for category in quizz.categories %}
+              {{category}} {% endfor %}</p>
               <input type="reset" name="reset" value="Reset" id="reset">
               <input type="submit" name="submit" value="Send" id="submit">
             </form>
@@ -38,4 +38,9 @@
       </div>
     </section>
 
+{% endblock %}
+
+{% block sidebar %}
+    <script src="{% static 'nadeshiko/js/ajax.js' %}"></script>
+    <script src="{% static 'nadeshiko/js/req.js' %}"></script>
 {% endblock %}

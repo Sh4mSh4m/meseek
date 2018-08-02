@@ -51,19 +51,19 @@ class Quizz():
 #        if self.level == 3: 
 #            nbPerCategories = ceil(self.size/len(self.categories))
         for question in questions:
-            questionsDict[index] = [question.char_jp, question.char_fr]
+            questionsDict[index] = {"jp":question.char_jp, "fr":question.char_fr}
             index += 1
         return questionsDict
 
     def populatesAnswers(self):
         answersDict = {}
         for index in self.questions.keys():
-            answersDict[index] = []
+            answersDict[index] = {}
         return answersDict
          
     def currentIndex(self):
         try:
-            index = max([ x for x in self.answers.keys() if self.answers[x] != [] ])
+            index = max([ x for x in self.answers.keys() if self.answers[x] != {} ]) + 1
         except ValueError:
             index = 1
         finally:
