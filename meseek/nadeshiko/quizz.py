@@ -1,4 +1,4 @@
-from math import ceil
+from math import ceil, floor
 from .models import Hiragana, Katakana, UserJapaneseLevel
 
 class Quizz():
@@ -6,34 +6,59 @@ class Quizz():
     Quizz class associated to users id and stored in a dictionnary
     for follow up
     """
+    MAX_LEVEL = 2
 
     def __init__(self, user):
+        """
+        Initializes every quizz attribute
+        """
         self.user = user
+        self.userInfo = self.collectsUserInfo()
+        self.scoreSheet = self.assesesScoreSheet()
+        self.level = self.assesesLevel()
+        # updatable per methods
+        self.size = 10
+        self.categories = self.listsCategories()
+        self.questions = self.populatesQuestions()
+        self.answers = self.populatesAnswers()
+        self.currentScore = 0
+        self.index = 0
+        self.completed = False
+
+    def collectsUserInfo(self):
+        """
+        Queries users database info
+        """
         try:
             userInfo = UserJapaneseLevel.objects.get(pk=self.user.id)
         except UserJapaneseLevel.DoesNotExist:
             userInfo = UserJapaneseLevel.objects.create(pk=self.user.id, user=self.user)
         finally:
-            self.scoreSheet = self.asseses(userInfo)
-            self.level = max([ x for x in self.scoreSheet.keys() if self.scoreSheet[x] != 0])
-            # updatable per methods
-            self.size = 10
-            self.categories = self.listsCategories()
-            self.questions = self.populatesQuestions()
-            self.answers = self.populatesAnswers()
-            self.index = self.currentIndex()
+            return userInfo
 
-    def asseses(self, UserJapaneseLevelObject):
+    def assesesScoreSheet(self):
+        """
+        Fetches users score sheet from database, returns dict
+        """
         scoreSheet = {}
-        for i in range(1,4):
+        for i in range(1, self.MAX_LEVEL+1):
             scores_level = "scores_level{}".format(i)
-            scores = getattr(UserJapaneseLevelObject, scores_level)
+            scores = getattr(self.userInfo, scores_level)
             scoresList = scores.split("-")
-            scores = [ int(x) for x in scoresList]
-            scoreSheet[i] = (sum(scores)/len(scores))
+            scoreSheet[i] = self.averagesList(scoresList)
         return scoreSheet
 
+    def assesesLevel(self):
+        """
+        Returns users level based on their scoreSheet
+        """
+        level = max([ x for x in self.scoreSheet.keys() if self.scoreSheet[x] != 0])
+        return level
+
     def listsCategories(self):
+        """
+        Returns categories list depending on quizz level
+        """
         if self.level == 1:
             return ['hiraganas']
         if self.level == 2:
@@ -42,6 +67,9 @@ class Quizz():
             return ['hiraganas', 'katakanas']
 
     def populatesQuestions(self):
+        """
+        Queries database for items to quizz about, returns dict
+        """
         questionsDict = {}
         index = 1
         if self.level == 1:
@@ -56,12 +84,18 @@ class Quizz():
         return questionsDict
 
     def populatesAnswers(self):
+        """
+        Creates the answer dict based on number of entries in questions dict
+        """
         answersDict = {}
         for index in self.questions.keys():
             answersDict[index] = {}
         return answersDict
          
     def currentIndex(self):
+        """
+        Defines index to quizz user about based on answer dict sheet
+        """
         try:
             index = max([ x for x in self.answers.keys() if self.answers[x] != {} ]) + 1
         except ValueError:
@@ -69,30 +103,57 @@ class Quizz():
         finally:
             return index
 
-    def levelUp(self):
-        pass
+    def updatesData(self, dataJSON):
+        """
+        Fills in answer sheet, and if reached end of questions list, 
+        evaluates currentScore and indicates that quizz is over
+        Index is updated here
+        """
+        answerIndex = dataJSON['index']
+        self.answers[answerIndex] = dataJSON['answer']
+        self.index = self.currentIndex()
+        if self.index == self.size + 1:
+            # resets some quizz data including index so that MsgServer can be sent
+            self.index = 1
+            self.assesesScore()
+            self.recordsScore()
+            # This will trigger quizz reinitialization on next Ajax post request
+            self.completed = True
 
+    def assesesScore(self):
+        """
+        Based on questions and answers, evaluates current score 
+        """
+        goodAnswers = 0
+        for index in self.questions.keys():
+            if self.questions[index] == self.answers[index]:
+                goodAnswers += 1
+        self.currentScore = floor((goodAnswers/self.size)*100)
 
+    def recordsScore(self):
+        """
+        Removes oldest score entry
+        Updates it with currentScore
+        Evlauates level up or not
+        Updates users scoreSheet in the database
+        """
+        scores_level = "scores_level{}".format(self.level)
+        currentScoreSheet = getattr(self.userInfo, scores_level)
+        scoresList = currentScoreSheet.split("-")
+        scoresList.pop()
+        scoresList.insert(0, str(self.currentScore/100))
+        # Evaluates level up
+        if (self.averagesList(scoresList) >= 90) and (self.level < self.MAX_LEVEL) :
+            next_score_level = "scores_level{}".format(self.level+1)
+            new_field_kwarg = {next_score_level: "0-0-0-0-1"}
+            UserJapaneseLevel.objects.filter(pk=self.user.id).update(**new_field_kwarg)
+        newScoreSheet = '-'.join(scoresList)
+        field_kwarg = {scores_level: newScoreSheet}
+        UserJapaneseLevel.objects.filter(pk=self.user.id).update(**field_kwarg)
+        check = UserJapaneseLevel.objects.get(pk=self.user.id)
+        print(check.scores_level1, check.scores_level2)
 
-#var MsgClient = {
-#    "answer": Caca,
-#    "reinitRequest": False,
-#    "settings": {
-#        "level": 1,
-#        "quizzLength": 10,
-#        }
-#    }
-
-#{
-#    "userInfo":
-#        {
-#        "level": Integer
-#        "scores": Dict
-#        }
-#    "quizzIndex": ""
-#    "quizzQuestion": ""
-#    "quizzLength": integer
-#    "reinitConfirmation": Boolean
-#    "completion": Boolean
-#    "score": Integer
-#}
+    def averagesList(self, aList):
+        nList = [ float(x) for x in aList]
+        return floor((sum(nList)/len(nList))*100)
+        

@@ -10,45 +10,65 @@ from .quizz import Quizz
 
 QUIZZ_INDEX = {}
 
-def index(request):
-    return render(request, 'nadeshiko/index.html')
 
-def quizz(request):
-    user = request.user
-    username = request.user.username
+#####################
+# Support functions #
+#####################
+
+def initiatesQuizz(user):
+    """
+    Support function to return existing quizz or creating one for user
+    Quizzes are stored in dict.
+    Quizzes are based on Quizz class
+    """
     try:
         quizz = QUIZZ_INDEX[user.id]
+        if quizz.completed:
+            quizz = Quizz(user)
+            QUIZZ_INDEX[user.id] = quizz
     except KeyError:
         quizz = Quizz(user)
         QUIZZ_INDEX[user.id] = quizz
     finally:
-        print("Voilà le lot de questions: {}".format(quizz.questions))
-        if request.method == 'POST':
-            # Retrieves post data
-            dataJSON = json.loads(request.body.decode('utf-8'))
-            answer = dataJSON['answer']
-            answerIndex = dataJSON['index']
-            quizz.answers[answerIndex] = answer
-            quizz.index = quizz.currentIndex()
-            print("Current index is {}".format(quizz.index))
-            print("Tes réponses sont {}".format(quizz.answers))
-            msgServer = {
-                "userInfo":
-                    {
-                    "level": quizz.level,
-                    "scores": quizz.scoreSheet,
-                    },
-                "quizzIndex": quizz.index,
-                "quizzQuestion": quizz.questions[quizz.index]['jp'],
-                "quizzLength": quizz.size,
-                "reinitConfirmation": False,
-                "completion": False,
-                "score": 0,
-            }
-            print(msgServer)
-            return JsonResponse(msgServer)
-        else:
-            return render(request, 'nadeshiko/quizz.html', {'quizz': quizz})
+        return quizz
+
+#####################
+#       Views       #
+#####################
+
+def index(request):
+    """
+    Entry view
+    """
+    return render(request, 'nadeshiko/index.html')
+
+def quizz(request):
+    """
+    Quizz view handling get and AJAX post requests
+    """
+    user = request.user
+    quizz = initiatesQuizz(user)
+    if request.method == 'POST':
+        # Retrieves post data
+        dataJSON = json.loads(request.body.decode('utf-8'))
+        if dataJSON['index'] != 0:
+            quizz.updatesData(dataJSON)
+        msgServer = {
+            "userInfo":
+                {
+                "level": quizz.level,
+                "scores": quizz.scoreSheet,
+                },
+            "quizzIndex": quizz.index,
+            "quizzLength": quizz.size,
+            "quizzQuestion": quizz.questions[quizz.index]['jp'],
+            "reinitConfirmation": False,
+            "completion": quizz.completed,
+            "score": quizz.currentScore,
+        }
+        return JsonResponse(msgServer)
+    else:
+        return render(request, 'nadeshiko/quizz.html', {'quizz': quizz})
 
 def hiraganas(request):
     hiraganas_list = Hiragana.objects.order_by('id')

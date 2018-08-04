@@ -17,10 +17,11 @@
             <p>Vous êtes au niveau {{ quizz.level }}</p>
             <p>Ci-après vos précédents scores</p>
             {% for level, score in quizz.scoreSheet.items %}
-            {% if score  != 0.0 %}
-            <p>niveau 
-            {{level}}: moyenne {{score}}</p>
-            {% endif %}
+              {% if score  > 20 %}
+                <p>niveau {{level}}: moyenne {{score}}</p>
+              {% elif 20 >= score > 0 and score != 0 %}  
+                <p>niveau {{level}}: débutant </p>
+              {% endif %}
             {% endfor %}
           </div> 
           <div id="configuration" class="col-md-9 mx-auto text-center">

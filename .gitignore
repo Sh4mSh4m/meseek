@@ -10,3 +10,17 @@ meseek/.DS_Store
 meseek/.coverage
 meseek/chat/.DS_Store
 meseek/db.sqlite3
+nadeshiko/__pycache__/level.cpython-36.pyc
+nadeshiko/__pycache__/quizz.cpython-36.pyc
+nadeshiko/__pycache__/tests.cpython-36.pyc
+nadeshiko/level.py
+nadeshiko/migrations/0001_initial.py
+nadeshiko/migrations/0002_hiragana_new.py
+nadeshiko/migrations/0003_remove_hiragana_new.py
+nadeshiko/migrations/__pycache__/0001_initial.cpython-36.pyc
+nadeshiko/migrations/__pycache__/0002_hiragana_new.cpython-36.pyc
+nadeshiko/migrations/__pycache__/0003_remove_hiragana_new.cpython-36.pyc
+nadeshiko/static/nadeshiko/js/req_ref.js
+nadeshiko/static/nadeshiko/package-lockTE.json
+nadeshiko/static/nadeshiko/packageTE.json
+nadeshiko/templates/nadeshiko/quizz_ref.html
