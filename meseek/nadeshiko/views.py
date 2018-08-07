@@ -5,7 +5,6 @@ import json
 # Create your views here.
 
 from .models import Hiragana, Katakana
-from .level import evaluates
 from .quizz import Quizz
 
 QUIZZ_INDEX = {}
