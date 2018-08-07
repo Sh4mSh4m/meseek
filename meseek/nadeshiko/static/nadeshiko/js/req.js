@@ -8,7 +8,6 @@ var quizzIndex = 0
 ////////////////////////////////////////////////////////////////
 // Functions that creates HTML elements to display in the log //
 ////////////////////////////////////////////////////////////////
-console.log('initiating page')
 // Main section
 function createQuizzDiv (questionItem, questionProgression) {
     // Answer div content with form creation

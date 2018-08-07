@@ -22,7 +22,7 @@ class Quizz():
         self.questions = self.populatesQuestions()
         self.answers = self.populatesAnswers()
         self.currentScore = 0
-        self.index = 0
+        self.index = 1
         self.completed = False
 
     def collectsUserInfo(self):
