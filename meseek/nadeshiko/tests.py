@@ -345,4 +345,4 @@ class seleniumTestsLoggedIn(StaticLiveServerTestCase):
         self.selenium.execute_script("")
         self.selenium.find_element_by_xpath('//form[@id="theForm"]').submit()
         # Quizz starts with question 1/10
-        self.selenium.find_element_by_xpath('//div[@id="questionProgression"]')
+        #self.selenium.find_element_by_xpath('//div[@id="questionProgression"]')
