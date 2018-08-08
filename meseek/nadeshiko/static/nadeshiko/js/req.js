@@ -52,9 +52,12 @@ function createQuizzDiv (questionItem, questionProgression) {
     quizzRowElt.appendChild(quizzQuestionDivElt);
     quizzRowElt.appendChild(quizzAnswerDivElt);
         // Quizz title
+    var filler = document.createElement("p")    
     var Title = document.createTextNode("A vous de jouer !");
     var quizzTitle = document.createElement('h4');
     quizzTitle.appendChild(Title);
+    quizzTitle.appendChild(filler);
+    quizzTitle.appendChild(filler);
     // Quizz div
     var quizzDivElt = document.createElement('div');
     quizzDivElt.setAttribute('class', 'col-md-9 mx-auto text-center');
