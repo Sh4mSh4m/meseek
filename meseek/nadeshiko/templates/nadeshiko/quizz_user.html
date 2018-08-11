@@ -1,0 +1,55 @@
+{% extends 'nadeshiko/base.html' %}
+{% load staticfiles %}
+
+{% block content %}
+    <section class="bg-primary" id="about">
+      <div class="container-fluid p-0">
+        <div class="row">
+          <div class="col-lg-8 mx-auto text-center">
+            <h2 class="section-heading">Quizz time</h2>
+            <hr class="light my-4">
+            <p class="text-faded mb-4">Configurez votre quizz ou commencez directement !</p>
+          </div>
+        </div>
+        <div id="main" class="row">
+          <div id="info" class="col-md-3 mx-auto text-center">
+            <h4>Bienvenue {{ quizz.user.username }}</h4>
+            <p>Vous êtes au niveau {{ quizz.level }}</p>
+            <p>Ci-après vos précédents scores</p>
+            {% for level, score in quizz.scoreSheet.items %}
+              {% if score  > 20 %}
+                <p>niveau {{level}}: moyenne {{score}}</p>
+              {% elif 20 >= score > 0 and score != 0 %}  
+                <p>niveau {{level}}: débutant </p>
+              {% endif %}
+            {% endfor %}
+          </div> 
+          <div id="question" class="col-md-9 mx-auto text-center">
+            <h4>A vous de jouer</h4>
+            <p></p>
+            <div id="questionRow" class="row">
+              <div class="col-md-6 mx-auto text-center">
+                <div id="questionProgression">Question: {{ quizz.index }}/{{ quizz.size}}</div>
+                <div id="questionDiv">{{ first_question }}</div>
+              </div>
+              <div class="col-md-6 mx-auto text-center">
+                    <form id="theForm" action="/nadeshiko/quizz/{{ user.id }}" method="post">
+                      {% csrf_token %}
+                      <div class="form-group">
+                        <input type="text" id="answerInput" size="20" autofocus="true" placeholder="Répondez ici">
+                      </div>
+                    </form>
+              </div>
+            </div>
+          </div>
+        </div> 
+      </div>
+    </section>
+
+{% endblock %}
+
+{% block sidebar %}
+    <script type="text/javascript">var DjangoQuizzIndex = "{{ quizz.index }}"</script>
+    <script src="{% static 'nadeshiko/js/ajax.js' %}"></script>
+    <script src="{% static 'nadeshiko/js/req.js' %}"></script>
+{% endblock %}
