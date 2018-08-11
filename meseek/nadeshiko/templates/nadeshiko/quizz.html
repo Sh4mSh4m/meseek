@@ -8,32 +8,36 @@
           <div class="col-lg-8 mx-auto text-center">
             <h2 class="section-heading">Quizz time</h2>
             <hr class="light my-4">
-            <p class="text-faded mb-4">Configurez votre quizz ou commencez directement !</p>
+            <h5 class="text-faded mb-4">Configurez votre quizz ou commencez directement !</h5>
           </div>
         </div>
         <div id="main" class="row">
           <div id="info" class="col-md-3 mx-auto text-center">
             <h4>Bienvenue {{ quizz.user.username }}</h4>
-            <p>Vous êtes au niveau {{ quizz.level }}</p>
-            <p>Ci-après vos précédents scores</p>
+            <h6>Vous êtes au niveau {{ quizz.level }}</h6>
+            <h6>Vos scores</h6>
             {% for level, score in quizz.scoreSheet.items %}
               {% if score  > 20 %}
-                <p>niveau {{level}}: moyenne {{score}}</p>
+                <h6>niveau {{level}}: moyenne {{score}}</h6>
               {% elif 20 >= score > 0 and score != 0 %}  
-                <p>niveau {{level}}: débutant </p>
+                <h6>niveau {{level}}: débutant </h6>
               {% endif %}
             {% endfor %}
           </div> 
           <div id="configuration" class="col-md-9 mx-auto text-center">
-            <h4>Configuration du quizz</h4>
-            <p>Difficulté du quizz: {{ quizz.size }} questions</p>
+            <h5>Configuration du quizz</h5>
+            <p></p>
             <form id="theForm" action="/nadeshiko/quizz/" method="post">
-              {% csrf_token %}
-              {{ form.as_p }}
-              <input type="reset" name="reset" value="Reset" id="reset">
-              <input type="submit" name="submit" value="Send" id="submit">
+              <h6>Difficulté: &emsp;
+                {% csrf_token %}
+                {% for choice in form.Difficulté %}
+                {{ choice.choice_label }} {{ choice.tag }}&emsp;
+                {% endfor %}
+                <input type="submit" name="submit" value="Send" id="submit">
+              </h6>
             </form>
-            <h4>Révisions</h4>
+            <p></p>   
+            <h5>Révisions</h5>
             <a href="{% url 'nadeshiko:hiraganas' %}">Hiraganas</a>
             <a href="{% url 'nadeshiko:katakanas' %}">Katakanas</a>
           </div>

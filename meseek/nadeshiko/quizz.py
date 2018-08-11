@@ -6,8 +6,8 @@ from django.utils.safestring import mark_safe
 
 class QuizzConfigurationForm(forms.Form):
     SIZE=[(10,'Standard'),
-         (20,'Challenge')]
-    Difficulté = forms.ChoiceField(choices=SIZE, widget=forms.RadioSelect())
+         (20,'Medium')]
+    Difficulté = forms.ChoiceField(choices=SIZE, widget=forms.RadioSelect(attrs={'style': 'display: inline'}))
 
 class Quizz():
     """
@@ -27,12 +27,14 @@ class Quizz():
         self.level = self.assesesLevel()
         self.index = 1
         self.currentScore = 0
-        self.completed = False
         # Per user setup
         self.size = 10
         self.categories = self.listsCategories()
         self.questions = self.populatesQuestions()
         self.answers = self.populatesAnswers()
+        # Bits modified per method
+        self.completed = False
+        self.lastAnswer = None
 
     def collectsUserInfo(self):
         """
@@ -120,6 +122,7 @@ class Quizz():
         """
         answerIndex = dataJSON['index']
         self.answers[answerIndex] = dataJSON['answer']
+        self.lastAnswer = self.assesesLastAnswer()
         self.index = self.currentIndex()
         if self.index == self.size + 1:
             # resets some quizz data including index so that MsgServer can be sent
@@ -128,6 +131,13 @@ class Quizz():
             self.recordsScore()
             # This will trigger quizz reinitialization on next Ajax post request
             self.completed = True
+
+    def assesesLastAnswer(self):
+        lastIndex = self.index
+        if self.questions[lastIndex] == self.answers[lastIndex]:
+            return True
+        else:
+            return False
 
     def assesesScore(self):
         """

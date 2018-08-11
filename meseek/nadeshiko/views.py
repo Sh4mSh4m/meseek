@@ -84,6 +84,7 @@ def quizzesUser(request, user_id):
             "quizzIndex": quizz.index,
             "quizzLength": quizz.size,
             "quizzQuestion": quizz.questions[quizz.index]['jp'],
+            "lastAnswer": quizz.lastAnswer,
             "reinitConfirmation": False,
             "completion": quizz.completed,
             "score": quizz.currentScore,

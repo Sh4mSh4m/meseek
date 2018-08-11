@@ -3,6 +3,7 @@
 ////////////////////////////////////////////////////////////////
 var main = document.getElementById("main");
 var answer = document.getElementById("answerInput")
+var info = document.getElementById("info")
 var form = document.getElementById("theForm");
 var quizzIndex = Number(DjangoQuizzIndex);
 console.log(quizzIndex)
@@ -14,9 +15,13 @@ console.log(quizzIndex)
 
 function createResultsDiv (quizzScore) {    
 
+    var currentUrl = window.location.href
+    var temp_list = currentUrl.split('/')
+    temp_list.pop()
+    var redirectURL = temp_list.join('/')
     var resetPhrase = document.createTextNode("Faire un autre quizz :)")
     var resetLink = document.createElement('a')
-    resetLink.setAttribute('href', "http://shamnorobotto.live/nadeshiko/quizz/")
+    resetLink.setAttribute('href', redirectURL)
     resetLink.appendChild(resetPhrase)
 
     var ScoreTitle = document.createTextNode(quizzScore);
@@ -35,6 +40,26 @@ function createResultsDiv (quizzScore) {
     resultDivElt.appendChild(resetLink);
     return resultDivElt;
 
+}
+
+function createAnimatedDiv () {
+    if (lastAnswer) {
+        var gif = document.createElement('img')
+        gif.setAttribute('src', '/static/nadeshiko/img/ryu_reg.gif');
+        gif.setAttribute('alt', 'ryu_ok');
+        gif.setAttribute('style', 'height:200px');
+    }
+    else {
+        var gif = document.createElement('img')
+        gif.setAttribute('src', '/static/nadeshiko/img/ryu_kick.gif');
+        gif.setAttribute('alt', 'ryu_nok');        
+        gif.setAttribute('style', 'height:200px');
+    }
+    var animatedDiv = document.createElement('div')
+    animatedDiv.setAttribute('class', 'col-md-3 mx-auto text-center');
+    animatedDiv.setAttribute('id', "info");
+    animatedDiv.appendChild(gif)
+    return animatedDiv
 }
 
 ////////////////////////////////
@@ -76,6 +101,7 @@ function ajaxSend(MsgClient){
             quizzIndex = MsgServer.quizzIndex
             quizzEnd = MsgServer.completion
             quizzScore = MsgServer.score
+            lastAnswer = MsgServer.lastAnswer
             if (quizzEnd) {
                 results = createResultsDiv(quizzScore)
                 question = document.getElementById("question")
@@ -83,6 +109,9 @@ function ajaxSend(MsgClient){
 
             }
             else {
+                var info = document.getElementById("info")
+                ryu = createAnimatedDiv(lastAnswer)
+                main.replaceChild(ryu, info)
                 document.getElementById("questionDiv").innerHTML = quizzQuestion
                 document.getElementById("questionProgression").innerHTML = quizzProgression
             }          
