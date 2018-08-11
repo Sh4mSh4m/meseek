@@ -1,11 +1,11 @@
+import json
 from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib.auth.models import User
 from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
-import json
 # Create your views here.
 
 from .models import Hiragana, Katakana
-from .quizz import Quizz
+from .quizz import Quizz, QuizzConfigurationForm
 
 QUIZZ_INDEX = {}
 
@@ -43,7 +43,30 @@ def index(request):
 
 def quizz(request):
     """
-    Quizz view handling get and AJAX post requests
+    View handling configuring or resuming the quizz
+    """
+    user = request.user
+    quizz = initiatesQuizz(user)
+    # form generating with default value
+    form = QuizzConfigurationForm({'Difficulté':10})
+    # Checking form conformity
+    if request.method == 'POST':
+        # Creates another form instance with post data
+        form = QuizzConfigurationForm(request.POST)
+        if form.is_valid():
+            if form.cleaned_data['Difficulté'] != quizz.size:
+                quizz.size = int(form.cleaned_data['Difficulté'])
+                quizz.questions = quizz.populatesQuestions()
+                quizz.answers = quizz.populatesAnswers()
+                quizz.index = quizz.currentIndex()
+            # redirection if form is valid
+            return HttpResponseRedirect('{}'.format(user.id))
+    else:
+        return render(request, 'nadeshiko/quizz.html', {'quizz': quizz, 'form': form})
+
+def quizzesUser(request, user_id):
+    """
+    View dedicated to the users quizz
     """
     user = request.user
     quizz = initiatesQuizz(user)
@@ -66,8 +89,9 @@ def quizz(request):
             "score": quizz.currentScore,
         }
         return JsonResponse(msgServer)
-    else:
-        return render(request, 'nadeshiko/quizz.html', {'quizz': quizz})
+    first_question = quizz.questions[quizz.index]['jp']
+    return render(request, 'nadeshiko/quizz_user.html', {'quizz': quizz, 'first_question': first_question})
+
 
 def hiraganas(request):
     hiraganas_list = Hiragana.objects.order_by('id')

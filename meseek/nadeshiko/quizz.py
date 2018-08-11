@@ -1,5 +1,13 @@
 from math import ceil, floor
 from .models import Hiragana, Katakana, UserJapaneseLevel
+from django import forms
+from django.utils.safestring import mark_safe
+
+
+class QuizzConfigurationForm(forms.Form):
+    SIZE=[(10,'Standard'),
+         (20,'Challenge')]
+    Difficulté = forms.ChoiceField(choices=SIZE, widget=forms.RadioSelect())
 
 class Quizz():
     """
@@ -12,18 +20,19 @@ class Quizz():
         """
         Initializes every quizz attribute
         """
+        # For initialization
         self.user = user
         self.userInfo = self.collectsUserInfo()
         self.scoreSheet = self.assesesScoreSheet()
         self.level = self.assesesLevel()
-        # updatable per methods
+        self.index = 1
+        self.currentScore = 0
+        self.completed = False
+        # Per user setup
         self.size = 10
         self.categories = self.listsCategories()
         self.questions = self.populatesQuestions()
         self.answers = self.populatesAnswers()
-        self.currentScore = 0
-        self.index = 1
-        self.completed = False
 
     def collectsUserInfo(self):
         """
@@ -151,7 +160,6 @@ class Quizz():
         field_kwarg = {scores_level: newScoreSheet}
         UserJapaneseLevel.objects.filter(pk=self.user.id).update(**field_kwarg)
         check = UserJapaneseLevel.objects.get(pk=self.user.id)
-        print(check.scores_level1, check.scores_level2)
 
     def averagesList(self, aList):
         nList = [ float(x) for x in aList]

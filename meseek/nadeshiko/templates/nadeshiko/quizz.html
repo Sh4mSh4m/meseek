@@ -27,13 +27,15 @@
           <div id="configuration" class="col-md-9 mx-auto text-center">
             <h4>Configuration du quizz</h4>
             <p>Difficulté du quizz: {{ quizz.size }} questions</p>
-            <form id="theForm">
+            <form id="theForm" action="/nadeshiko/quizz/" method="post">
               {% csrf_token %}
-              <p>Catégories du quizz:{% for category in quizz.categories %}
-              {{category}} {% endfor %}</p>
+              {{ form.as_p }}
               <input type="reset" name="reset" value="Reset" id="reset">
               <input type="submit" name="submit" value="Send" id="submit">
             </form>
+            <h4>Révisions</h4>
+            <a href="{% url 'nadeshiko:hiraganas' %}">Hiraganas</a>
+            <a href="{% url 'nadeshiko:katakanas' %}">Katakanas</a>
           </div>
         </div>
       </div>
@@ -41,7 +43,3 @@
 
 {% endblock %}
 
-{% block sidebar %}
-    <script src="{% static 'nadeshiko/js/ajax.js' %}"></script>
-    <script src="{% static 'nadeshiko/js/req.js' %}"></script>
-{% endblock %}

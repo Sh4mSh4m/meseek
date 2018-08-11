@@ -2,6 +2,7 @@ import json
 import time 
 from django.contrib.staticfiles.testing import StaticLiveServerTestCase
 from selenium.webdriver.chrome.webdriver import WebDriver
+from selenium.webdriver.common.keys import Keys
 from django.test import TestCase, Client, TransactionTestCase, tag
 from django.urls import reverse
 from django.contrib.auth import login, authenticate
@@ -64,7 +65,6 @@ class AwebClientTestCaseLoggedIn(TestCase):
     """
     def setUp(self):
         self.user = User.objects.create_user('billy', 'temporary@gmail.com', 'temporary')
-        print("The user id is {}".format(self.user.id))
         self.c = Client()
         self.c.login(username="billy", password="temporary")
 
@@ -73,7 +73,7 @@ class AwebClientTestCaseLoggedIn(TestCase):
         my_acount page loads
         user email appears
         """
-        response = self.c.get('/nadeshiko/my_account/1')
+        response = self.c.get('/nadeshiko/my_account/{}'.format(self.user.id))
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, "temporary@gmail.com")
 
@@ -95,33 +95,30 @@ class AwebClientTestCaseLoggedIn(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, "billy")
         self.assertContains(response, "niveau 1: débutant")
-        self.assertContains(response, "Catégories")
+        self.assertContains(response, "Configuration")
+        self.assertContains(response, "Difficulté")
+        self.assertContains(response, "Standard")        
         self.assertContains(response, "Send")
 
     def test_4_quizz_logged_in_post_initial(self):
         """
         Being logged in, user sends JSON
         Response is JSON with correct Data.
-        Question being randomly chosen, it is not tested
+        Question being randomly chosen, it is not tested, neither is answer
         """
         for char in HIR_char_list:
             create_entry_Hiragana(**char)
-        MsgClient = {"index": 0,
-        "answer": {},
-        "reinitRequest": False,
-        "settings": {
-            "level": 1,
-            "quizzLength": 10,
-            },
+        MsgClient = {"index": 1,
+        "answer": {"jp": 'ju', "fr": 'ju'},
         }
-        response = self.c.get(reverse('nadeshiko:quizz'))
+        kwargs_user = {'user_id': self.user.id}
+        response = self.c.get('/nadeshiko/quizz/{}'.format(self.user.id))
         self.assertEqual(response.status_code, 200)
-        postresponse = self.c.post(reverse('nadeshiko:quizz'), json.dumps(MsgClient), content_type='application/json')
+        postresponse = self.c.post('/nadeshiko/quizz/{}'.format(self.user.id), json.dumps(MsgClient), content_type='application/json')
         self.assertEqual(postresponse.status_code, 200)
-        print("le quizzIndex est de : {}".format(postresponse.json()))
         self.assertEqual(postresponse.json()['userInfo']['level'], 1)
         self.assertEqual(postresponse.json()['userInfo']['scores'], {'1': 20, '2': 0})
-        self.assertEqual(postresponse.json()['quizzIndex'], 1)
+        self.assertEqual(postresponse.json()['quizzIndex'], 2)
         self.assertEqual(postresponse.json()['quizzLength'], 10)
         self.assertEqual(postresponse.json()['reinitConfirmation'], False)
         self.assertEqual(postresponse.json()['completion'], False)
@@ -136,15 +133,10 @@ class AwebClientTestCaseLoggedIn(TestCase):
             create_entry_Hiragana(**char)
         MsgClient = {"index": 10,
         "answer": {"jp": 'KA', "fr": 'KA'},
-        "reinitRequest": False,
-        "settings": {
-            "level": 1,
-            "quizzLength": 10,
-            },
         }
-        response = self.c.get(reverse('nadeshiko:quizz'))
+        response = self.c.get('/nadeshiko/quizz/{}'.format(self.user.id))
         self.assertEqual(response.status_code, 200)
-        postresponse = self.c.post(reverse('nadeshiko:quizz'), json.dumps(MsgClient), content_type='application/json')
+        postresponse = self.c.post('/nadeshiko/quizz/{}'.format(self.user.id), json.dumps(MsgClient), content_type='application/json')
         self.assertEqual(postresponse.status_code, 200)
         self.assertEqual(postresponse.json()['completion'], True)
 
@@ -270,7 +262,7 @@ class seleniumTestsNotLoggedIn(StaticLiveServerTestCase):
         super().tearDownClass()
 
     @tag('sel')
-    def test_index_no_login(self):
+    def test_sel_index_no_login(self):
         """
         Integration test, verify presence of register icon in page
         Link to register to accounts/login
@@ -284,7 +276,7 @@ class seleniumTestsNotLoggedIn(StaticLiveServerTestCase):
         self.selenium.find_element_by_xpath('//section[@id="about"]')
 
     @tag('sel')
-    def test_signup_no_login(self):
+    def test_sel_signup_no_login(self):
         """
         Signup form containing the various fields required for signup         """
         self.selenium.get('%s%s' % (self.live_server_url, '/signup/'))
@@ -296,7 +288,7 @@ class seleniumTestsNotLoggedIn(StaticLiveServerTestCase):
         self.selenium.find_element_by_xpath('//input[contains(@name, "password2")]')
 
     @tag('sel')
-    def test_register(self):
+    def test_sel_register(self):
 
         """
         Signup form containing the various fields required for signup
@@ -324,12 +316,13 @@ class seleniumTestsLoggedIn(StaticLiveServerTestCase):
         super().tearDownClass()
 
     @tag('last')
-    def test_index_loggedin(self):
+    def test_SEL_index_loggedin(self):
         """
         Integration test, 
         user logs in, 
-        icons in top nav bar change
         user can access quizz
+        user answers 10 questions
+        Server informs user successfully finished quizz
         """
         self.selenium.get('%s%s' % (self.live_server_url, '/nadeshiko/'))
         #user logs in
@@ -345,4 +338,12 @@ class seleniumTestsLoggedIn(StaticLiveServerTestCase):
         self.selenium.execute_script("")
         self.selenium.find_element_by_xpath('//form[@id="theForm"]').submit()
         # Quizz starts with question 1/10
-        #self.selenium.find_element_by_xpath('//div[@id="questionProgression"]')
+        self.selenium.find_element_by_xpath('//h4[contains(text(), "vous de jouer")]')
+        for i in range(1,11):
+            self.selenium.find_element_by_xpath('//div[@id="questionProgression" and contains(text(), "Question: {}")]'.format(i))
+            self.selenium.find_element_by_xpath('//input[@id="answerInput"]').send_keys("ku")
+            self.selenium.find_element_by_xpath('//input[@id="answerInput"]').send_keys(Keys.RETURN)
+        self.selenium.find_element_by_xpath('//h4[contains(text(), "Vous avez terminé")]')
+
+
+

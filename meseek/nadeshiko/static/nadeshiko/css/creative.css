@@ -328,3 +328,7 @@ header.masthead p {
   background: transparent;
   border-bottom: 1px solid blue;
 }
+
+.form p, ul, li {
+  font-family: 'Open Sans', 'Helvetica Neue', Arial, sans-serif; 
+}
