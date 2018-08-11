@@ -14,11 +14,13 @@
         <div class="h-75 row">
           <div class="container h100">
             <div class="row h-100 justify-content-center align-items-center">
-              <form class="form" method="post">
-                {% csrf_token %}
-                {{ form.as_p }}
-                <button type="submit">Sign up</button>
-              </form>
+              <div>
+                <form class="form" method="post">
+                  {% csrf_token %}
+                  {{ form.as_p }}
+                  <button type="submit">Sign up</button>
+                </form>
+              </div>
             </div>
           </div>  
         </div>
