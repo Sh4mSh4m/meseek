@@ -16,7 +16,7 @@ function createResultsDiv (quizzScore) {
 
     var resetPhrase = document.createTextNode("Faire un autre quizz :)")
     var resetLink = document.createElement('a')
-    resetLink.setAttribute('href', "http://127.0.0.1:8000/nadeshiko/quizz/")
+    resetLink.setAttribute('href', "http://shamnorobotto.live/nadeshiko/quizz/")
     resetLink.appendChild(resetPhrase)
 
     var ScoreTitle = document.createTextNode(quizzScore);
