@@ -1,11 +1,15 @@
 import json
+import pytesseract
 from django.shortcuts import render, get_object_or_404, redirect
+from django.conf import settings
+from django.core.files.storage import FileSystemStorage
 from django.contrib.auth.models import User
 from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
+from PIL import Image, ImageFilter
 # Create your views here.
-
 from .models import Hiragana, Katakana
 from .quizz import Quizz, QuizzConfigurationForm
+
 
 QUIZZ_INDEX = {}
 
@@ -30,6 +34,15 @@ def initiatesQuizz(user):
         QUIZZ_INDEX[user.id] = quizz
     finally:
         return quizz
+
+def ocr(filename):
+    """
+    Opens file and applies OCR on it to get both japanese and english
+    """
+    img = Image.open(filename)
+    img.filter(ImageFilter.SHARPEN)
+    text = pytesseract.image_to_string(img, config="-psm 6", lang="jpn+eng")
+    return text.split('\n')
 
 #####################
 #       Views       #
@@ -105,3 +118,25 @@ def katakanas(request):
 def my_account(request, user_id):
     user = get_object_or_404(User, pk=user_id)
     return render(request, 'nadeshiko/my_account.html', {'user': user})
+
+def upload(request):
+    if request.method == 'POST' and request.FILES['myfile']:
+        myfile = request.FILES['myfile']
+        fs = FileSystemStorage()
+        filename = fs.save(myfile.name, myfile)
+        uploaded_file_url = fs.url(filename)
+        path2file = "." + uploaded_file_url
+        wordList = ocr(path2file)
+        rows = len(wordList)
+        print(wordList)
+        return render(request, 'nadeshiko/simple_upload.html', {
+            'uploaded_file_url': uploaded_file_url, 'wordList': wordList, 'rows': rows})
+    return render(request, 'nadeshiko/simple_upload.html')
+
+
+def loading(request):
+    if request.method == 'POST':
+        print("alright got it")
+        dataJSON = json.loads(request.body.decode('utf-8'))
+        print(dataJSON)
+        return JsonResponse({"response": "ok"})

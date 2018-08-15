@@ -1,4 +1,6 @@
 from django.urls import path, include
+from django.conf import settings
+from django.conf.urls.static import static
 from . import views
 
 
@@ -13,4 +15,9 @@ urlpatterns = [
     path('quizz/<int:user_id>', views.quizzesUser, name='quizzesUser'),
     path('hiraganas/', views.hiraganas, name='hiraganas'),
     path('katakanas/', views.katakanas, name='katakanas'),
+    path('upload/', views.upload, name='upload'),
+    path('loading/', views.loading, name='loading'),
 ]
+
+if settings.DEBUG:
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

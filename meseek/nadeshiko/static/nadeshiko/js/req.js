@@ -95,7 +95,6 @@ function ajaxSend(MsgClient){
         "dataType": "json",
         "data": JSON.stringify(MsgClient),
         "success": function(MsgServer) {
-            console.log(MsgServer)
             quizzQuestion = MsgServer.quizzQuestion
             quizzProgression = "Question: " + MsgServer.quizzIndex + "/" + MsgServer.quizzLength
             quizzIndex = MsgServer.quizzIndex

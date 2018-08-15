@@ -1,0 +1,46 @@
+{% extends 'nadeshiko/base.html' %}
+
+{% load static %}
+
+{% block content %}
+    <header class="masthead text-center text-white d-flex">
+      <div class="container my-auto">
+          <div class="col-lg-12 mx-auto">
+            <h1 class="text-uppercase">
+              <strong>Admin side - upload de données</strong>
+            </h1>
+            <hr>
+          </div>
+          <div class="row form-group">
+            <form method="post" enctype="multipart/form-data">
+              {% csrf_token %}
+              <input type="file" name="myfile">
+              <button type="submit">Upload</button>
+            </form>
+          </div>
+          {% if uploaded_file_url %}
+          <div class="row">
+              <p>File uploaded at: <a href="{{ uploaded_file_url }}">{{ uploaded_file_url }}</a></p>
+          </div>
+          <div class="row form-group">
+                <form class="col-lg-12 mx-auto">
+                  {% csrf_token %}
+                  <label for="level">Niveau</label>
+                  <input type="number" name="level" id="level">
+                  <textarea type="text" id ="upload" class="form-control" rows="{{ rows }}" autofocus="true" style="min-width: 100%">"{% for word in wordList %}{{ word }}" <br /> {% endfor %}"
+                  </textarea>
+                    <input type="submit" name="submit" value="Send" id="submit">
+                </form>
+          </div>
+          {% endif %}
+      </div>
+    </header>
+
+
+  <p><a href="{% url 'nadeshiko:index' %}">Return to home</a></p>
+{% endblock %}
+
+{% block sidebar %}
+    <script src="{% static 'nadeshiko/js/upload.js' %}"></script>
+    <script src="{% static 'nadeshiko/js/ajax.js' %}"></script>
+{% endblock %}
