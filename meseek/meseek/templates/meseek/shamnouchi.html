@@ -33,10 +33,11 @@
           <div id = "text" class="col-xs-12 col-md-6">
               <h1>Welcome to Sham No Robotto homepage</h1>
               {% if user.is_authenticated %}
-              <p>You're logged in mate, and you are {{ user.username }} with id {{ user.id }}</p>
+              <p>Welcome {{ user.username }} with id {{ user.id }}</p>
               <p>Now let's head to <a href="{% url 'nadeshiko:index' %}">Nadeshiko</a></p>
               {% else %}
               <p>Let's get you signed up <a href="{% url 'signup' %}">right here</a></p>
+              <p>Else you can log in <a href="{% url 'nadeshiko:login' %}">here</a></p> 
               {% endif %}
           </div>
         </div>
