@@ -8,7 +8,7 @@ from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
 from PIL import Image, ImageFilter
 # Create your views here.
 from .models import Hiragana, Katakana
-from .quizz import Quizz, QuizzConfigurationForm
+from .quizz import Quizz, QuizzConfigurationForm, OCRTextForm
 
 
 QUIZZ_INDEX = {}
@@ -128,9 +128,11 @@ def upload(request):
         path2file = "." + uploaded_file_url
         wordList = ocr(path2file)
         rows = len(wordList)
-        print(wordList)
+        form = OCRTextForm(wordList)
+        print("successfully crearted form")
+        print(form)
         return render(request, 'nadeshiko/simple_upload.html', {
-            'uploaded_file_url': uploaded_file_url, 'wordList': wordList, 'rows': rows})
+            'uploaded_file_url': uploaded_file_url, 'wordList': wordList, 'rows': rows, 'form': form })
     return render(request, 'nadeshiko/simple_upload.html')
 
 
