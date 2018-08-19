@@ -1,5 +1,7 @@
 from django.db import models
 from django.conf import settings
+from django import forms
+
 
 # Nadeshiko users scores logs
 class UserJapaneseLevel(models.Model):
@@ -32,3 +34,14 @@ class Katakana(models.Model):
     class Meta:
         managed = True
         db_table = 'nadeshiko_katakana'
+
+class QuizzConfigurationForm(forms.Form):
+    SIZE=[(10,'Standard'),
+         (20,'Medium')]
+    Difficulté = forms.ChoiceField(choices=SIZE, widget=forms.RadioSelect(attrs={'style': 'display: inline'}))
+
+class OCRTextForm(forms.Form):
+    def __init__(self, wordList):
+        super().__init__()
+        for word in wordList:
+            self.fields['word{}'.format(wordList.index(word))]=forms.CharField(initial=word)

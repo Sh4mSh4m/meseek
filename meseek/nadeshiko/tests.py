@@ -331,7 +331,6 @@ class seleniumTestsLoggedIn(StaticLiveServerTestCase):
         self.selenium.find_element_by_xpath('//input[contains(@name, "password")]').send_keys('temporary')
         self.selenium.find_element_by_xpath('//input[@type="submit"]').click()
         # Users returns to index page but clicks starts here
-        self.selenium.find_element_by_xpath('//a[contains(@href, "quizz")]').click()
         # Page loads with username displayed
         self.selenium.find_element_by_xpath('//h4[contains(text(), "wally")]')
         # Quizz init

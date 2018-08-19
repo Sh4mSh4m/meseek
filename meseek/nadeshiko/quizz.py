@@ -1,19 +1,6 @@
 from math import ceil, floor
 from .models import Hiragana, Katakana, UserJapaneseLevel
-from django import forms
-from django.utils.safestring import mark_safe
 
-
-class QuizzConfigurationForm(forms.Form):
-    SIZE=[(10,'Standard'),
-         (20,'Medium')]
-    Difficulté = forms.ChoiceField(choices=SIZE, widget=forms.RadioSelect(attrs={'style': 'display: inline'}))
-
-class OCRTextForm(forms.Form):
-    def __init__(self, wordList):
-        super().__init__()
-        for word in wordList:
-            self.fields['word{}'.format(wordList.index(word))]=forms.CharField(initial=word)
 
 class Quizz():
     """

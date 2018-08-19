@@ -7,8 +7,8 @@ from django.contrib.auth.models import User
 from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
 from PIL import Image, ImageFilter
 # Create your views here.
-from .models import Hiragana, Katakana
-from .quizz import Quizz, QuizzConfigurationForm, OCRTextForm
+from .models import Hiragana, Katakana, QuizzConfigurationForm, OCRTextForm
+from .quizz import Quizz
 
 
 QUIZZ_INDEX = {}
@@ -41,7 +41,7 @@ def ocr(filename):
     """
     img = Image.open(filename)
     img.filter(ImageFilter.SHARPEN)
-    text = pytesseract.image_to_string(img, config="-psm 6", lang="jpn+eng")
+    text = pytesseract.image_to_string(img, config="-psm 6", lang="jpn+fra")
     return text.split('\n')
 
 #####################
@@ -108,29 +108,39 @@ def quizzesUser(request, user_id):
 
 
 def hiraganas(request):
+    """
+    Simple Hiraganas view
+    """
     hiraganas_list = Hiragana.objects.order_by('id')
     return render(request, 'nadeshiko/hiraganas.html', {'hiraganas': hiraganas_list})
 
 def katakanas(request):
+    """
+    Simple Kakatanas view
+    """
     katakanas_list = Katakana.objects.order_by('id')
     return render(request, 'nadeshiko/katakanas.html', {'katakanas': katakanas_list})
 
 def my_account(request, user_id):
+    """
+    Simple account information view
+    """
     user = get_object_or_404(User, pk=user_id)
     return render(request, 'nadeshiko/my_account.html', {'user': user})
 
 def upload(request):
+    """
+    Uploads file, processes through OCR function and returns dynamic form with content of OCR text
+    """
     if request.method == 'POST' and request.FILES['myfile']:
         myfile = request.FILES['myfile']
         fs = FileSystemStorage()
         filename = fs.save(myfile.name, myfile)
         uploaded_file_url = fs.url(filename)
         path2file = "." + uploaded_file_url
-        wordList = ocr(path2file)
+        wordList = ocr(path2file)  # OCR process on the file
         rows = len(wordList)
-        form = OCRTextForm(wordList)
-        print("successfully crearted form")
-        print(form)
+        form = OCRTextForm(wordList)  # dynamic form creation
         return render(request, 'nadeshiko/simple_upload.html', {
             'uploaded_file_url': uploaded_file_url, 'wordList': wordList, 'rows': rows, 'form': form })
     return render(request, 'nadeshiko/simple_upload.html')
@@ -138,7 +148,5 @@ def upload(request):
 
 def loading(request):
     if request.method == 'POST':
-        print("alright got it")
         dataJSON = json.loads(request.body.decode('utf-8'))
-        print(dataJSON)
         return JsonResponse({"response": "ok"})
