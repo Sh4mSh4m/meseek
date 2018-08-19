@@ -7,7 +7,8 @@ from django.contrib.auth.models import User
 from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
 from PIL import Image, ImageFilter
 # Create your views here.
-from .models import Hiragana, Katakana, QuizzConfigurationForm, OCRTextForm
+from .models import Hiragana, Katakana, LessonScan
+from .forms import QuizzConfigurationForm, OCRTextForm, LessonScanForm
 from .quizz import Quizz
 
 
@@ -132,18 +133,21 @@ def upload(request):
     """
     Uploads file, processes through OCR function and returns dynamic form with content of OCR text
     """
-    if request.method == 'POST' and request.FILES['myfile']:
-        myfile = request.FILES['myfile']
-        fs = FileSystemStorage()
-        filename = fs.save(myfile.name, myfile)
-        uploaded_file_url = fs.url(filename)
-        path2file = "." + uploaded_file_url
-        wordList = ocr(path2file)  # OCR process on the file
-        rows = len(wordList)
-        form = OCRTextForm(wordList)  # dynamic form creation
-        return render(request, 'nadeshiko/simple_upload.html', {
-            'uploaded_file_url': uploaded_file_url, 'wordList': wordList, 'rows': rows, 'form': form })
-    return render(request, 'nadeshiko/simple_upload.html')
+    if request.method == 'POST':
+        form = LessonScanForm(request.POST, request.FILES)
+        if form.is_valid():
+            scan = form.save()
+            # stupid way to collect
+            path2file = "." + "/media/" + str(scan.image)
+            wordList = ocr(path2file)  # OCR process on the file
+            print(wordList)
+            rows = len(wordList)
+            formToEdit = OCRTextForm(wordList)  # dynamic form creation
+            return render(request, 'nadeshiko/simple_upload.html', {
+            'scan': scan, 'wordList': wordList, 'rows': rows, 'formToEdit': formToEdit })
+    else:
+        form = LessonScanForm()
+        return render(request, 'nadeshiko/simple_upload.html', {'form': form})
 
 
 def loading(request):

@@ -1,10 +1,12 @@
 from django.db import models
 from django.conf import settings
-from django import forms
 
 
-# Nadeshiko users scores logs
+
 class UserJapaneseLevel(models.Model):
+    """
+    Nadeshiko users scores logs
+    """
     id = models.IntegerField(primary_key=True)
     user = models.ForeignKey(settings.AUTH_USER_MODEL,on_delete=models.CASCADE)
     scores_level1 = models.CharField(max_length=100, default="0-0-0-0-1")
@@ -15,7 +17,11 @@ class UserJapaneseLevel(models.Model):
         managed = True
         db_table = 'user_japanese_level'
 
+
 class Hiragana(models.Model):
+    """
+    First level data
+    """
     id = models.IntegerField(primary_key=True)
     char_jp = models.CharField(max_length=10)
     char_fr = models.CharField(max_length=10)
@@ -25,7 +31,11 @@ class Hiragana(models.Model):
         managed = True
         db_table = 'nadeshiko_hiragana'
 
+
 class Katakana(models.Model):
+    """
+    Second level data
+    """
     id = models.IntegerField(primary_key=True)
     char_jp = models.CharField(max_length=10)
     char_fr = models.CharField(max_length=10)
@@ -35,13 +45,12 @@ class Katakana(models.Model):
         managed = True
         db_table = 'nadeshiko_katakana'
 
-class QuizzConfigurationForm(forms.Form):
-    SIZE=[(10,'Standard'),
-         (20,'Medium')]
-    Difficulté = forms.ChoiceField(choices=SIZE, widget=forms.RadioSelect(attrs={'style': 'display: inline'}))
 
-class OCRTextForm(forms.Form):
-    def __init__(self, wordList):
-        super().__init__()
-        for word in wordList:
-            self.fields['word{}'.format(wordList.index(word))]=forms.CharField(initial=word)
+class LessonScan(models.Model):
+    """
+    Files uploaded for scans
+    """
+    description = models.CharField(max_length=255, blank=True)
+    image = models.FileField(upload_to='scans/')
+    uploaded_at = models.DateTimeField(auto_now_add=True)
+

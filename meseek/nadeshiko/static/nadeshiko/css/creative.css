@@ -332,3 +332,8 @@ header.masthead p {
 .form p, ul, li {
   font-family: 'Open Sans', 'Helvetica Neue', Arial, sans-serif; 
 }
+
+#scan {
+  max-height:100%;
+  max-width: 100%;
+}

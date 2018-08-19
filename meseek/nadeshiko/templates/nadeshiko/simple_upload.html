@@ -5,7 +5,7 @@
 {% block content %}
     <header class="masthead text-center text-white d-flex">
       <div class="container my-auto">
-          <div class="mx-auto">
+          <div>
             <h1 class="text-uppercase">
               <strong>Admin side - upload de données</strong>
             </h1>
@@ -14,22 +14,22 @@
           <div class="row form-group">
             <form method="post" enctype="multipart/form-data">
               {% csrf_token %}
-              <input type="file" name="myfile">
+              {{ form.as_p }}
               <button type="submit">Upload</button>
             </form>
           </div>
-          {% if uploaded_file_url %}
+          {% if wordList %}
           <div class="row">
-              <p>File uploaded at: <a href="{{ uploaded_file_url }}">{{ uploaded_file_url }}</a></p>
+              <p>The file was uploaded </a></p>
           </div>
           <div class="row form-group">
             <div class="col-lg-6 ml-auto text-center">
-              <img src="http://127.0.0.1:8000{{ uploaded_file_url }}" alt="uploaded image"/>
+              <img id="scan" src="/nadeshiko{{ scan.image.url }}" alt="uploaded scan"/>
             </div>
             <div class="col-lg-6 ml-auto text-center">  
                 <form class="mx-auto" action="/nadeshiko/loading/">
                   {% csrf_token %}
-                  {{ form.as_p }}
+                  {{ formToEdit.as_p }}
                 </form>
             </div>
           </div>
