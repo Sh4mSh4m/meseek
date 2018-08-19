@@ -12,7 +12,7 @@
             <hr>
           </div>
           <div class="row form-group">
-            <form method="post" enctype="multipart/form-data">
+            <form action="" method="post" enctype="multipart/form-data">
               {% csrf_token %}
               {{ form.as_p }}
               {% if form %}
@@ -25,13 +25,17 @@
               <p>Le fichier a bien été chargé</a></p>
           </div>
           <div class="row form-group">
+            {% if scan %}
             <div class="col-lg-6 ml-auto text-center">
               <img id="scan_img" src="/nadeshiko{{ scan.image.url }}" alt="uploaded scan"/>
             </div>
+            {% endif %}
             <div class="col-lg-6 ml-auto text-center">  
-                <form id="formFromScan" class="mx-auto" action="/nadeshiko/loading/">
+                <form action="" class="mx-auto" method="post">
                   {% csrf_token %}
                   {{ formToEdit.as_p }}
+                  {{ formToEdit.errors }}
+                  {{ formToEdit.non_field_errors }}
                 <button type="submit">Upload</button>
                 </form>
             </div>
