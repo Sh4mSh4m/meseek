@@ -4,10 +4,10 @@
 
 {% block content %}
     <section>
-      <div class="container my-auto">
+      <div id="upload_scan" class="container-fluid my-auto">
           <div class="mx-auto">
             <h1 class="text-uppercase">
-              <strong>Admin side - upload de données</strong>
+              <strong>Administration- upload de scans</strong>
             </h1>
             <hr>
           </div>
@@ -15,21 +15,24 @@
             <form method="post" enctype="multipart/form-data">
               {% csrf_token %}
               {{ form.as_p }}
+              {% if form %}
               <button type="submit">Upload</button>
+              {% endif %}
             </form>
           </div>
           {% if wordList %}
           <div class="row">
-              <p>The file was uploaded </a></p>
+              <p>Le fichier a bien été chargé</a></p>
           </div>
           <div class="row form-group">
             <div class="col-lg-6 ml-auto text-center">
-              <img id="scan" src="/nadeshiko{{ scan.image.url }}" alt="uploaded scan"/>
+              <img id="scan_img" src="/nadeshiko{{ scan.image.url }}" alt="uploaded scan"/>
             </div>
             <div class="col-lg-6 ml-auto text-center">  
                 <form id="formFromScan" class="mx-auto" action="/nadeshiko/loading/">
                   {% csrf_token %}
                   {{ formToEdit.as_p }}
+                <button type="submit">Upload</button>
                 </form>
             </div>
           </div>

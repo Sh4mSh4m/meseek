@@ -334,10 +334,14 @@ header.masthead p {
 }
 
 #formFromScan input {
-  width: 100%;
+  width: 80%;
 }
 
-#scan {
+#upload_scan {
+  padding: 0px 50px 0px 50px;
+}
+
+#scan_img {
   max-height:100%;
   max-width: 100%;
 }

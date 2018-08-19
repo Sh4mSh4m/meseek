@@ -152,5 +152,6 @@ def upload(request):
 
 def loading(request):
     if request.method == 'POST':
-        dataJSON = json.loads(request.body.decode('utf-8'))
-        return JsonResponse({"response": "ok"})
+        form = OCRTextForm()
+        if form.is_valid():
+            print(form.__dict__)
