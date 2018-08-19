@@ -3,9 +3,9 @@
 {% load static %}
 
 {% block content %}
-    <header class="masthead text-center text-white d-flex">
+    <section>
       <div class="container my-auto">
-          <div>
+          <div class="mx-auto">
             <h1 class="text-uppercase">
               <strong>Admin side - upload de données</strong>
             </h1>
@@ -27,7 +27,7 @@
               <img id="scan" src="/nadeshiko{{ scan.image.url }}" alt="uploaded scan"/>
             </div>
             <div class="col-lg-6 ml-auto text-center">  
-                <form class="mx-auto" action="/nadeshiko/loading/">
+                <form id="formFromScan" class="mx-auto" action="/nadeshiko/loading/">
                   {% csrf_token %}
                   {{ formToEdit.as_p }}
                 </form>
@@ -36,7 +36,6 @@
           {% endif %}
           <p><a href="{% url 'nadeshiko:index' %}">Return to home</a></p>
       </div>
-    </header>
-
+    </section>
 
 {% endblock %}

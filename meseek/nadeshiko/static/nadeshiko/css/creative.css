@@ -333,6 +333,10 @@ header.masthead p {
   font-family: 'Open Sans', 'Helvetica Neue', Arial, sans-serif; 
 }
 
+#formFromScan input {
+  width: 100%;
+}
+
 #scan {
   max-height:100%;
   max-width: 100%;
