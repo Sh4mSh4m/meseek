@@ -133,26 +133,32 @@ def upload(request):
     """
     Uploads file, processes through OCR function and returns dynamic form with content of OCR text
     """
+    wordList = []
     if request.method == 'POST' and 'image' in request.FILES.keys():
         form = LessonScanForm(request.POST, request.FILES)
         if form.is_valid():
             scan = form.save()
             # stupid way to collect
             path2file = "." + "/media/" + str(scan.image)
-            wordList = ocr(path2file)  # OCR process on the file
+            wordList = ocr(path2file) 
             rows = len(wordList)
-            formToEdit = OCRTextForm(wordList)  # dynamic form creation
+            formToEdit = OCRTextForm(wordList=wordList)  # dynamic form creation
             return render(request, 'nadeshiko/simple_upload.html', {
             'scan': scan, 'wordList': wordList, 'rows': rows, 'formToEdit': formToEdit })
     elif request.method == 'POST':
-        keys = [ key for key in request.POST.keys() if "Mot" in key]
-        vocList = []
-        for key in keys:
-            vocList.append(request.POST[key])
-        formToEdit = OCRTextForm(vocList)
-        rows = len(vocList)
-        print('YOUHOU')
-        print(request.POST)
+#        keys = [ key for key in request.POST.keys() if "Mot" in key]
+#        vocList = []
+#        for key in keys:
+#            vocList.append(request.POST[key])
+#        formToEdit = OCRTextForm(vocList)
+#        rows = len(vocList)
+#        print('YOUHOU')
+#        print(request.POST)
+        formToEdit = OCRTextForm(request.POST, wordList=wordList)
+        print(formToEdit.is_valid())
+        if formToEdit.is_valid():
+            print('YOUHOU')
+            print(request.POST)
         return JsonResponse({'message':"ok"})
     else:
         form = LessonScanForm()
