@@ -7,7 +7,7 @@ from django.contrib.auth.models import User
 from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
 from PIL import Image, ImageFilter
 # Create your views here.
-from .models import Hiragana, Katakana, LessonScan
+from .models import Hiragana, Katakana, LessonScan, Vocabulary
 from .forms import QuizzConfigurationForm, OCRTextForm, LessonScanForm
 from .quizz import Quizz
 
@@ -142,24 +142,22 @@ def upload(request):
             path2file = "." + "/media/" + str(scan.image)
             wordList = ocr(path2file) 
             rows = len(wordList)
-            formToEdit = OCRTextForm(wordList=wordList)  # dynamic form creation
+            formToEdit = OCRTextForm(initial={'Type':'vocabulaire'}, wordList=wordList)  # dynamic form creation
             return render(request, 'nadeshiko/simple_upload.html', {
             'scan': scan, 'wordList': wordList, 'rows': rows, 'formToEdit': formToEdit })
     elif request.method == 'POST':
-#        keys = [ key for key in request.POST.keys() if "Mot" in key]
-#        vocList = []
-#        for key in keys:
-#            vocList.append(request.POST[key])
-#        formToEdit = OCRTextForm(vocList)
-#        rows = len(vocList)
-#        print('YOUHOU')
-#        print(request.POST)
         formToEdit = OCRTextForm(request.POST, wordList=wordList)
-        print(formToEdit.is_valid())
         if formToEdit.is_valid():
-            print('YOUHOU')
-            print(request.POST)
-        return JsonResponse({'message':"ok"})
+            voc_type = formToEdit.cleaned_data['Type'] 
+            level = formToEdit.cleaned_data['Level'] 
+            for key, value in request.POST.items():
+                if "Mot" in key and value != '':
+                    word=Vocabulary(voc_jp=value.split('//')[0])
+                    word.voc_fr = value.split('//')[1]
+                    word.level=level
+                    word.voc_type=voc_type
+                    word.save()
+            return JsonResponse({'message':"ok"})
     else:
         form = LessonScanForm()
         return render(request, 'nadeshiko/simple_upload.html', {'form': form})

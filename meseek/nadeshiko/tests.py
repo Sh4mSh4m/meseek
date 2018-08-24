@@ -410,6 +410,9 @@ class seleniumTestsLoggedIn(StaticLiveServerTestCase):
         # Form is returned and an image is loaded
         self.selenium.find_element_by_xpath('//p[contains(text(), "Le fichier a bien été chargé")]')
         # Staff fills in first field
+        # Default type is selected now
+        time.sleep(3)
+        self.selenium.find_element_by_xpath('//input[@id="id_Type_0"]').click()
         self.selenium.find_element_by_xpath('//input[@id="id_Mot0"]').send_keys("わたしは//Je")
         # Staff sends form
         self.selenium.find_element_by_xpath('//button[contains(text(), "Upload")]').click()

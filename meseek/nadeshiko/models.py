@@ -54,3 +54,18 @@ class LessonScan(models.Model):
     image = models.FileField(upload_to='scans/')
     uploaded_at = models.DateTimeField(auto_now_add=True)
 
+class Vocabulary(models.Model):
+    """
+    Main vocabulary table with levels
+    """
+    voc_jp = models.CharField(max_length=200)
+    voc_fr = models.CharField(max_length=200)
+    level = models.IntegerField(default=3)
+    voc_type = models.CharField(max_length=200)
+
+
+    class Meta:
+        managed = True
+        db_table = 'nadeshiko_vocabulary'
+
+
