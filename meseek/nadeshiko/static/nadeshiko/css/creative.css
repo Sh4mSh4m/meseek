@@ -345,3 +345,8 @@ header.masthead p {
   max-height:100%;
   max-width: 100%;
 }
+
+#loading {
+  margin: 100px;
+  display: none;
+}

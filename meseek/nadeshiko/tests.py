@@ -1,5 +1,6 @@
 import json
-import time 
+import time
+import os
 from django.contrib.staticfiles.testing import StaticLiveServerTestCase
 from selenium.webdriver.chrome.webdriver import WebDriver
 from selenium.webdriver.common.keys import Keys
@@ -340,8 +341,11 @@ class seleniumTestsLoggedIn(StaticLiveServerTestCase):
     def setUpClass(cls):
         super().setUpClass()
         cls.selenium = WebDriver()
-        cls.selenium.implicitly_wait(10)
+        cls.selenium.implicitly_wait(15)
         cls.user = User.objects.create_user('wally', 'temporary@gmail.com', 'temporary')
+        cls.staff = User.objects.create_user('staff', 'temporary@gmail.com', 'temporary')
+        cls.staff.is_staff = True
+        cls.staff.save()
         cls.userInfo = UserJapaneseLevel.objects.create(pk=cls.user.id, user=cls.user)
         for char in HIR_char_list:
             create_entry_Hiragana(**char) 
@@ -352,7 +356,7 @@ class seleniumTestsLoggedIn(StaticLiveServerTestCase):
         super().tearDownClass()
 
     @tag('last')
-    def test_SEL_index_loggedin(self):
+    def test_sel_index_loggedin(self):
         """
         Integration test, 
         user logs in, 
@@ -370,7 +374,6 @@ class seleniumTestsLoggedIn(StaticLiveServerTestCase):
         # Page loads with username displayed
         self.selenium.find_element_by_xpath('//h4[contains(text(), "wally")]')
         # Quizz init
-        self.selenium.execute_script("")
         self.selenium.find_element_by_xpath('//form[@id="theForm"]').submit()
         # Quizz starts with question 1/10
         self.selenium.find_element_by_xpath('//h4[contains(text(), "vous de jouer")]')
@@ -379,6 +382,43 @@ class seleniumTestsLoggedIn(StaticLiveServerTestCase):
             self.selenium.find_element_by_xpath('//input[@id="answerInput"]').send_keys("ku")
             self.selenium.find_element_by_xpath('//input[@id="answerInput"]').send_keys(Keys.RETURN)
         self.selenium.find_element_by_xpath('//h4[contains(text(), "Vous avez terminé")]')
+
+    @tag('staff')
+    def test_sel_staff_upload(self):
+        """
+        Integration test, 
+        user logs in, 
+        user can access quizz
+        user answers 10 questions
+        Server informs user successfully finished quizz
+        """
+        self.selenium.get('%s%s' % (self.live_server_url, '/nadeshiko/'))
+        # staff logs in
+        self.selenium.find_element_by_xpath('//a[contains(@href, "login")]').click()
+        self.selenium.find_element_by_xpath('//input[contains(@name, "username")]').send_keys('staff')
+        self.selenium.find_element_by_xpath('//input[contains(@name, "password")]').send_keys('temporary')
+        self.selenium.find_element_by_xpath('//input[@type="submit"]').click()
+        # staff goes to upload page
+        self.selenium.get('%s%s' % (self.live_server_url, '/nadeshiko/upload'))
+        self.selenium.find_element_by_xpath('//strong[contains(text(), "upload de scans")]')
+        # Staff selects an image to load
+        self.selenium.find_element_by_xpath('//input[@id="id_image"]').send_keys(os.getcwd()+"/test-Lesson1-1.png")
+        # Sending scan
+        self.selenium.find_element_by_xpath('//button[contains(text(), "Upload du scan")]').click()
+        # Scan is sent and user is informed the page is loading
+        self.selenium.find_element_by_xpath('//div[contains(text(), "Votre scan est en cours de chargement")]')
+        # Form is returned and an image is loaded
+        self.selenium.find_element_by_xpath('//p[contains(text(), "Le fichier a bien été chargé")]')
+        # Staff fills in first field
+        self.selenium.find_element_by_xpath('//input[@id="id_Mot0"]').send_keys("わたしは//Je")
+        # Staff sends form
+        self.selenium.find_element_by_xpath('//button[contains(text(), "Upload")]').click()
+        # Staff receives JSON info
+        self.selenium.find_element_by_xpath('//pre[contains(text(), "message")]')
+
+        
+        
+
 
 
 

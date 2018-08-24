@@ -4,6 +4,9 @@
 
 {% block content %}
     <section>
+      <div id="loading">
+        <div><i class="fa fa-spinner fa-spin"></i> Votre scan est en cours de chargement</div>
+      </div>
       <div id="upload_scan" class="container-fluid my-auto">
           <div class="mx-auto">
             <h1 class="text-uppercase">
@@ -13,17 +16,17 @@
           </div>
         {% if user.is_staff %}
           <div class="row form-group">
-            <form action="" method="post" enctype="multipart/form-data">
+            <form id="form1" action="" method="post" enctype="multipart/form-data">
               {% csrf_token %}
               {{ form.as_p }}
               {% if form %}
-              <button type="submit">Upload</button>
+              <button type="submit">Upload du scan</button>
               {% endif %}
             </form>
           </div>
           {% if wordList %}
           <div class="row">
-              <p>Le fichier a bien été chargé</a></p>
+              <p>Le fichier a bien été chargé</p>
           </div>
           <div class="row form-group">
             {% if scan %}
@@ -32,7 +35,7 @@
             </div>
             {% endif %}
             <div class="col-lg-6 ml-auto text-center">  
-                <form action="" class="mx-auto" method="post">
+                <form id="formFromScan" action="" class="mx-auto" method="post">
                   {% csrf_token %}
                   {{ formToEdit.as_p }}
                   {{ formToEdit.errors }}
@@ -50,4 +53,8 @@
       </div>
     </section>
 
+{% endblock %}
+
+{% block sidebar %}
+    <script src="{% static 'nadeshiko/js/upload.js' %}"></script>
 {% endblock %}
