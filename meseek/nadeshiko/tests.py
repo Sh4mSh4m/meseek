@@ -57,6 +57,16 @@ class AwebClientTestCaseNoLogin(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, "Katakanas")
 
+    @tag('staff')
+    def test_upload(self):
+        """
+        Without being logged in, or user not staff
+        """
+        response = self.client.get(reverse('nadeshiko:upload'))
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, "Sorry, this is a staff page only")
+
+
 
 class AwebClientTestCaseLoggedIn(TestCase):
     """
@@ -142,6 +152,32 @@ class AwebClientTestCaseLoggedIn(TestCase):
 
     def tearDown(self):
         self.user.delete()
+
+
+class StaffFeatures(TestCase):
+    """
+    Test suite for the django server, verifying views return expected templates
+    and behaviors to get and post requests
+    """
+    def setUp(self):
+        self.user = User.objects.create_user('staff', 'temporary@gmail.com', 'temporary')
+        self.user.is_staff = True
+        self.user.save()
+        self.c = Client()
+        self.c.login(username="staff", password="temporary")
+
+    @tag('staff')
+    def test_staff_upload(self):
+        """
+        As the user is logged in, user can access quizz
+        """
+        response = self.c.get(reverse('nadeshiko:upload'))
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, "Upload")
+
+    def tearDown(self):
+        self.user.delete()
+
 
 class QuizzClass(TestCase):
 

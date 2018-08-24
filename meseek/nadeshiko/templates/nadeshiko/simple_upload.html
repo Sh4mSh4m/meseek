@@ -11,6 +11,7 @@
             </h1>
             <hr>
           </div>
+        {% if user.is_staff %}
           <div class="row form-group">
             <form action="" method="post" enctype="multipart/form-data">
               {% csrf_token %}
@@ -42,6 +43,10 @@
           </div>
           {% endif %}
           <p><a href="{% url 'nadeshiko:index' %}">Return to home</a></p>
+        {% else %}
+          <p>Sorry, this is a staff page only.</p>
+          <p><a href="{% url 'nadeshiko:index' %}">Return to home</a></p>
+        {% endif %}
       </div>
     </section>
 
