@@ -87,7 +87,7 @@ def quizzesUser(request, user_id):
     if request.method == 'POST':
         # Retrieves post data
         dataJSON = json.loads(request.body.decode('utf-8'))
-        if dataJSON['index'] != 0:
+        if dataJSON['index'] != 0 and dataJSON['answer'] !=0:
             quizz.updatesData(dataJSON)
         msgServer = {
             "userInfo":

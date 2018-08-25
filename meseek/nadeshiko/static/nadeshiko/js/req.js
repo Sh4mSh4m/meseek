@@ -68,7 +68,7 @@ function createAnimatedDiv () {
 // Answer form sender
 
 answer.addEventListener('keypress', function (e) {
-    if (e.keyCode === 13 && answer.value !== '') {
+    if (e.keyCode === 13 && answer.value !== null) {
         element = document.getElementById("questionDiv")
         quizzQuestion = element.innerHTML
         quizzAnswer = answer.value.toUpperCase()
@@ -78,7 +78,6 @@ answer.addEventListener('keypress', function (e) {
             "index": quizzIndex,
             "answer": answerSent,
             };
-        console.log(MsgClient)
         ajaxSend(MsgClient);
         e.preventDefault()
     }
