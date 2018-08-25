@@ -18,6 +18,3 @@ urlpatterns = [
     path('upload/', views.upload, name='upload'),
     path('loading/', views.loading, name='loading'),
 ]
-
-if settings.DEBUG:
-    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

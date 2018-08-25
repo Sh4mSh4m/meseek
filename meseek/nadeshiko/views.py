@@ -143,6 +143,7 @@ def upload(request):
             wordList = ocr(path2file) 
             rows = len(wordList)
             formToEdit = OCRTextForm(initial={'Type':'vocabulaire'}, wordList=wordList)  # dynamic form creation
+            print(formToEdit)
             return render(request, 'nadeshiko/simple_upload.html', {
             'scan': scan, 'wordList': wordList, 'rows': rows, 'formToEdit': formToEdit })
     elif request.method == 'POST':
