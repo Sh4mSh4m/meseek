@@ -17,7 +17,7 @@ class LessonScanForm(forms.ModelForm):
 class OCRTextForm(forms.Form):
     VOCTYPE=[('vocabulaire','Vocabulaire'),
          ('other', 'Other')]
-    Type = forms.ChoiceField(choices=VOCTYPE, widget=forms.RadioSelect())
+    Type = forms.ChoiceField(choices=VOCTYPE, widget=forms.RadioSelect(attrs={'style': 'display: inline-block'}))
     Level = forms.IntegerField(initial=3, required=True)
     
     def __init__(self, *args, **kwargs):

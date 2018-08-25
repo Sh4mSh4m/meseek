@@ -35,11 +35,21 @@
             </div>
             {% endif %}
             <div class="col-lg-6 ml-auto text-center">  
-                <form id="formFromScan" action="" class="mx-auto" method="post">
+                <form id="formFromScan" action="" method="post">
                   {% csrf_token %}
-                  {{ formToEdit.as_p }}
-                  {{ formToEdit.errors }}
-                  {{ formToEdit.non_field_errors }}
+                  {% for field in formToEdit %}
+                    {% if field == formToEdit.Type %}
+                      <h6>Type &emsp;
+                      {% for choice in field %}
+                        {{ choice.choice_label }} {{ choice.tag }}&emsp;
+                      {% endfor %}
+                      </h6>
+                    {% else %}
+                      <h6>{{ field.label_tag}} {{field}}</h6>
+                    {% endif %}
+                  {% endfor %}
+
+
                 <button type="submit">Upload</button>
                 </form>
             </div>
