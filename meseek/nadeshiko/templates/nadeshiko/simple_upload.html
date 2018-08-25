@@ -1,6 +1,7 @@
 {% extends 'nadeshiko/base.html' %}
 
 {% load static %}
+{% load media %}
 
 {% block content %}
     <section>
@@ -31,7 +32,7 @@
           <div class="row form-group">
             {% if scan %}
             <div class="col-lg-6 ml-auto text-center">
-              <img id="scan_img" src="/nadeshiko{{ scan.image.url }}" alt="uploaded scan"/>
+              <img id="scan_img" src="/{{ scan.image.url }}" alt="uploaded scan"/>
             </div>
             {% endif %}
             <div class="col-lg-6 ml-auto text-center">  
