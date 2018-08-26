@@ -59,24 +59,27 @@ def quizz(request):
     """
     View handling configuring or resuming the quizz
     """
-    user = request.user
-    quizz = initiatesQuizz(user)
-    # form generating with default value
-    form = QuizzConfigurationForm({'Difficulté':10})
-    # Checking form conformity
-    if request.method == 'POST':
-        # Creates another form instance with post data
-        form = QuizzConfigurationForm(request.POST)
-        if form.is_valid():
-            if form.cleaned_data['Difficulté'] != quizz.size:
-                quizz.size = int(form.cleaned_data['Difficulté'])
-                quizz.questions = quizz.populatesQuestions()
-                quizz.answers = quizz.populatesAnswers()
-                quizz.index = quizz.currentIndex()
-            # redirection if form is valid
-            return HttpResponseRedirect('{}'.format(user.id))
+    if request.user.is_authenticated:
+        user = request.user
+        quizz = initiatesQuizz(user)
+        # form generating with default value
+        form = QuizzConfigurationForm({'Difficulté':10})
+        # Checking form conformity
+        if request.method == 'POST':
+            # Creates another form instance with post data
+            form = QuizzConfigurationForm(request.POST)
+            if form.is_valid():
+                if form.cleaned_data['Difficulté'] != quizz.size:
+                    quizz.size = int(form.cleaned_data['Difficulté'])
+                    quizz.questions = quizz.populatesQuestions()
+                    quizz.answers = quizz.populatesAnswers()
+                    quizz.index = quizz.currentIndex()
+                # redirection if form is valid
+                return HttpResponseRedirect('{}'.format(user.id))
+        else:
+            return render(request, 'nadeshiko/quizz.html', {'quizz': quizz, 'form': form})
     else:
-        return render(request, 'nadeshiko/quizz.html', {'quizz': quizz, 'form': form})
+        return render(request, 'nadeshiko/quizz.html')
 
 def quizzesUser(request, user_id):
     """

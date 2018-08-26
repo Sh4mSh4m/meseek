@@ -8,6 +8,7 @@
           <div class="col-lg-8 mx-auto text-center">
             <h2 class="section-heading">Quizz time</h2>
             <hr class="light my-4">
+      {% if user.is_authenticated %}
             <h5 class="text-faded mb-4">Configurez votre quizz ou commencez directement !</h5>
           </div>
         </div>
@@ -33,7 +34,7 @@
                 {% for choice in form.Difficulté %}
                 {{ choice.choice_label }} {{ choice.tag }}&emsp;
                 {% endfor %}
-                <input type="submit" name="submit" value="Send" id="submit">
+                <input type="button" name="submit" value="Send" id="submit">
               </h6>
             </form>
             <p></p>   
@@ -43,6 +44,12 @@
           </div>
         </div>
       </div>
+      {% else %}
+            <h5 class="text-faded mb-4">Désolé vous n'êtes pas authentifié !</h5>
+            <p><a href="{% url 'nadeshiko:index' %}">Return to home</a></p>
+          </div>
+        </div>
+      {% endif %}
     </section>
 
 {% endblock %}

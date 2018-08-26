@@ -58,6 +58,16 @@ class AwebClientTestCaseNoLogin(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, "Katakanas")
 
+    def test_quizz_access_not_log(self):
+        """
+        Without being logged in, user attempts to reach quizz page
+        He is invited to go home
+        """
+        response = self.client.get(reverse('nadeshiko:quizz'))
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, "Désolé vous n'êtes pas authentifié")
+
+
     @tag('staff')
     def test_upload(self):
         """
