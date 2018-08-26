@@ -101,13 +101,15 @@ class seleniumTestsLoggedIn(StaticLiveServerTestCase):
         super().tearDownClass()
 
 
-    @tag('selenium')
+    @tag('selenium', 'solo')
     def test_sel_index_loggedin(self):
         """
         Integration test, 
         user logs in, 
         user can access quizz
-        user answers 10 questions
+        user answers 5 questions
+        user leaves
+        user comes back and can pursue his quizz
         Server informs user successfully finished quizz
         """
         self.selenium.get('%s%s' % (self.live_server_url, '/nadeshiko/'))
@@ -123,7 +125,15 @@ class seleniumTestsLoggedIn(StaticLiveServerTestCase):
         self.selenium.find_element_by_xpath('//form[@id="theForm"]').submit()
         # Quizz starts with question 1/10
         self.selenium.find_element_by_xpath('//h4[contains(text(), "vous de jouer")]')
-        for i in range(1,11):
+        for i in range(1,6):
+            self.selenium.find_element_by_xpath('//div[@id="questionProgression" and contains(text(), "Question: {}")]'.format(i))
+            self.selenium.find_element_by_xpath('//input[@id="answerInput"]').send_keys("ku")
+            self.selenium.find_element_by_xpath('//input[@id="answerInput"]').send_keys(Keys.RETURN)
+        # User goes back to quizz page
+        self.selenium.get('%s%s' % (self.live_server_url, '/nadeshiko/quizz'))
+        # User finds link to continue
+        self.selenium.find_element_by_xpath('//a[contains(text(), "finissez-le")]').click()
+        for i in range(6,11):
             self.selenium.find_element_by_xpath('//div[@id="questionProgression" and contains(text(), "Question: {}")]'.format(i))
             self.selenium.find_element_by_xpath('//input[@id="answerInput"]').send_keys("ku")
             self.selenium.find_element_by_xpath('//input[@id="answerInput"]').send_keys(Keys.RETURN)
