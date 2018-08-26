@@ -32,6 +32,7 @@ class AwebClientTestCaseNoLogin(TestCase):
     """
     Test suite for the django server, verifying views return expected templates
     """
+    @tag('guest')
     def test_index_not_loggedin(self):
         """
         Without being logged in, user has to register or create an account
@@ -42,6 +43,7 @@ class AwebClientTestCaseNoLogin(TestCase):
         self.assertContains(response, "Enregistrez-vous")
         self.assertContains(response, "inscrivez-vous")
 
+    @tag('guest')
     def test_hiragana_not_loggedin(self):
         """
         Without being logged in, user has to register or create an account
@@ -50,6 +52,7 @@ class AwebClientTestCaseNoLogin(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, "Hiraganas")
 
+    @tag('guest')
     def test_katakanas_not_loggedin(self):
         """
         Without being logged in, user has to register or create an account
@@ -58,6 +61,7 @@ class AwebClientTestCaseNoLogin(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, "Katakanas")
 
+    @tag('guest')
     def test_quizz_access_not_log(self):
         """
         Without being logged in, user attempts to reach quizz page
@@ -67,6 +71,15 @@ class AwebClientTestCaseNoLogin(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, "Désolé vous n'êtes pas authentifié")
 
+    @tag('guest')
+    def test_quizz_access_user_not_log(self):
+        """
+        Without being logged in, user attempts to reach quizz page
+        He is invited to go home
+        """
+        response = self.client.get('/nadeshiko/quizz/3')
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, "Désolé vous n'êtes pas authentifié")
 
     @tag('staff')
     def test_upload(self):
@@ -89,6 +102,7 @@ class AwebClientTestCaseLoggedIn(TestCase):
         self.c = Client()
         self.c.login(username="billy", password="temporary")
 
+    @tag('user')
     def test_1_my_account(self):
         """
         my_acount page loads
@@ -98,6 +112,7 @@ class AwebClientTestCaseLoggedIn(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, "temporary@gmail.com")
 
+    @tag('user')
     def test_2_index_loggedin(self):
         """
         As the user is logged in, user can access quizz
@@ -107,6 +122,7 @@ class AwebClientTestCaseLoggedIn(TestCase):
         self.assertContains(response, "Ecole de langues et cultures japonaises")
         self.assertContains(response, "Commencez")
 
+    @tag('user')
     def test_3_quizz_logged_in_beginner(self):
         """
         Being logged in, username is listed as well with its level
@@ -121,6 +137,7 @@ class AwebClientTestCaseLoggedIn(TestCase):
         self.assertContains(response, "Standard")        
         self.assertContains(response, "Send")
 
+    @tag('user')
     def test_4_quizz_logged_in_post_initial(self):
         """
         Being logged in, user sends JSON
@@ -145,6 +162,7 @@ class AwebClientTestCaseLoggedIn(TestCase):
         self.assertEqual(postresponse.json()['completion'], False)
         self.assertEqual(postresponse.json()['score'], 0)
 
+    @tag('user')
     def test_5_quizz_logged_in_post_last_answer(self):
         """
         When sending last item, server identifies it is the last question

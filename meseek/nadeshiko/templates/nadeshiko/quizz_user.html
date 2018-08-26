@@ -8,6 +8,7 @@
           <div class="col-lg-8 mx-auto text-center">
             <h2 class="section-heading">Quizz time</h2>
             <hr class="light my-4">
+      {% if user.is_authenticated %}
             <p class="text-faded mb-4">Configurez votre quizz ou commencez directement !</p>
           </div>
         </div>
@@ -34,14 +35,22 @@
               </div>
             </div>
           </div>
-        </div> 
+        </div>
       </div>
+      {% else %}
+            <h5 class="text-faded mb-4">Désolé vous n'êtes pas authentifié !</h5>
+            <p><a href="{% url 'nadeshiko:index' %}">Return to home</a></p>
+          </div>
+        </div>
+      {% endif %}
     </section>
 
 {% endblock %}
 
 {% block sidebar %}
+  {% if user.is_authenticated %}
     <script type="text/javascript">var DjangoQuizzIndex = "{{ quizz.index }}"</script>
     <script src="{% static 'nadeshiko/js/ajax.js' %}"></script>
     <script src="{% static 'nadeshiko/js/req.js' %}"></script>
+  {% endif %}
 {% endblock %}
