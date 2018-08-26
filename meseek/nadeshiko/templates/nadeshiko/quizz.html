@@ -26,7 +26,10 @@
             {% endfor %}
           </div> 
           <div id="configuration" class="col-md-9 mx-auto text-center">
-            <h5>Configuration du quizz</h5>
+            {% if quizz.index != 1 %}
+            <h4>Vous avez déjà un quizz en cours, <a href="{% url 'nadeshiko:quizzesUser' user_id=user.id %}">finissez-le</a></h4>
+            {% endif %}
+            <h4>Configuration du quizz</h4>
             <p></p>
             <form id="theForm" action="/nadeshiko/quizz/" method="post">
               <h6>Difficulté: &emsp;
@@ -38,9 +41,6 @@
               </h6>
             </form>
             <p></p>
-            {% if quizz.index != 1 %}
-            <h4>Vous avez déjà un quizz en cours, <a href="{% url 'nadeshiko:quizzesUser' user_id=user.id %}">finissez-le</a></h4>
-            {% endif %}
             <h5>Révisions</h5>
             <a href="{% url 'nadeshiko:hiraganas' %}">Hiraganas</a>
             <a href="{% url 'nadeshiko:katakanas' %}">Katakanas</a>
