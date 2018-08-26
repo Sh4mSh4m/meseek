@@ -13,16 +13,8 @@
         </div>
         <div id="main" class="row">
           <div id="info" class="col-md-3 mx-auto text-center">
-            <h4>Bienvenue {{ quizz.user.username }}</h4>
-            <p>Vous êtes au niveau {{ quizz.level }}</p>
-            <p>Ci-après vos précédents scores</p>
-            {% for level, score in quizz.scoreSheet.items %}
-              {% if score  > 20 %}
-                <p>niveau {{level}}: moyenne {{score}}</p>
-              {% elif 20 >= score > 0 and score != 0 %}  
-                <p>niveau {{level}}: débutant </p>
-              {% endif %}
-            {% endfor %}
+            <h4 id="ryu_says">Fightoooo !!!</h4>
+            <img id="ryu" style="height: 250px" src="{% static 'nadeshiko/img/ryu/ryu_poses.gif' %}" alt="ryu_poses"/>
           </div> 
           <div id="question" class="col-md-9 mx-auto text-center">
             <h4>A vous de jouer</h4>

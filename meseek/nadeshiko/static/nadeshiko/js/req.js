@@ -42,25 +42,41 @@ function createResultsDiv (quizzScore) {
 
 }
 
-function createAnimatedDiv () {
+
+var wins = [
+  "/static/nadeshiko/img/ryu/wins/SHOORYUUUKEN !!!.gif",
+  "/static/nadeshiko/img/ryu/wins/TATSUMAKI !!!.gif",
+  "/static/nadeshiko/img/ryu/wins/YEEAAH !!!.gif",
+  "/static/nadeshiko/img/ryu/wins/HADOOOOKEN !!!.gif",
+];
+
+var loses = [
+  "/static/nadeshiko/img/ryu/loses/Huuuuuhh.gif",
+  "/static/nadeshiko/img/ryu/loses/Nooooooo.gif",
+  "/static/nadeshiko/img/ryu/loses/Arrgggh.gif",
+];
+
+function animatesRyu () {
     if (lastAnswer) {
-        var gif = document.createElement('img')
-        gif.setAttribute('src', '/static/nadeshiko/img/ryu_reg.gif');
-        gif.setAttribute('alt', 'ryu_ok');
-        gif.setAttribute('style', 'height:200px');
+        var winsLen = wins.length
+        var WIN = Math.floor(winsLen*Math.random())
+        document.getElementById('ryu').src=wins[WIN];
+        var gif = wins[WIN].split('/').pop()
+        var phrase = gif.split('.')
+        phrase.pop()
+        document.getElementById('ryu_says').innerHTML=phrase;
     }
     else {
-        var gif = document.createElement('img')
-        gif.setAttribute('src', '/static/nadeshiko/img/ryu_kick.gif');
-        gif.setAttribute('alt', 'ryu_nok');        
-        gif.setAttribute('style', 'height:200px');
+        var losesLen = loses.length
+        var LOSE = Math.floor(losesLen*Math.random())
+        document.getElementById('ryu').src=loses[LOSE];
+        var gif = loses[LOSE].split('/').pop()
+        var phrase = gif.split('.')
+        phrase.pop()
+        document.getElementById('ryu_says').innerHTML=phrase;
     }
-    var animatedDiv = document.createElement('div')
-    animatedDiv.setAttribute('class', 'col-md-3 mx-auto text-center');
-    animatedDiv.setAttribute('id', "info");
-    animatedDiv.appendChild(gif)
-    return animatedDiv
 }
+
 
 ////////////////////////////////
 // Backend interaction server //
@@ -104,12 +120,11 @@ function ajaxSend(MsgClient){
                 results = createResultsDiv(quizzScore)
                 question = document.getElementById("question")
                 main.replaceChild(results, question)
-
+                animatesRyu(lastAnswer)
             }
             else {
                 var info = document.getElementById("info")
-                ryu = createAnimatedDiv(lastAnswer)
-                main.replaceChild(ryu, info)
+                animatesRyu(lastAnswer)
                 document.getElementById("questionDiv").innerHTML = quizzQuestion
                 document.getElementById("questionProgression").innerHTML = quizzProgression
             }          
