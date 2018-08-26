@@ -54,7 +54,7 @@ function createResultsDiv (quizzScore) {
     }
 
     var resultGif = document.createElement('img');
-    resultGif.setAttribute('style', "height: 300px");
+//    resultGif.setAttribute('style', "height: 300px");
     resultGif.setAttribute('src', gifV);
     var resultGifDiv = document.createElement('div')
     resultGifDiv.appendChild(resultGif)
@@ -86,9 +86,9 @@ function createResultsDiv (quizzScore) {
 
 
 var wins = [
-  "/static/nadeshiko/img/ryu/wins/SHOORYUUUKEN !!!.gif",
-  "/static/nadeshiko/img/ryu/wins/TATSUMAKI !!!.gif",
-  "/static/nadeshiko/img/ryu/wins/YEEAAH !!!.gif",
+  "/static/nadeshiko/img/ryu/wins/PUNCH !!!.gif",
+//  "/static/nadeshiko/img/ryu/wins/TATSUMAKI !!!.gif",
+  "/static/nadeshiko/img/ryu/wins/KICK !!!.gif",
   "/static/nadeshiko/img/ryu/wins/HADOOOOKEN !!!.gif",
 ];
 
@@ -98,7 +98,21 @@ var loses = [
   "/static/nadeshiko/img/ryu/loses/Arrgggh.gif",
 ];
 
-function animatesRyu () {
+
+var awins = [
+//  "/static/nadeshiko/img/akuma/wins/aPUNCH.gif",
+  "/static/nadeshiko/img/akuma/wins/aSPUNCH.gif",
+  "/static/nadeshiko/img/akuma/wins/aKICK.gif",
+  "/static/nadeshiko/img/akuma/wins/aHADOKEN.gif",
+];
+
+var aloses = [
+  "/static/nadeshiko/img/akuma/loses/Huhhhhh.gif",
+  "/static/nadeshiko/img/akuma/loses/Noooooo.gif",
+  "/static/nadeshiko/img/akuma/loses/Arrghhhh.gif",
+];
+
+function animatesChar () {
     var thumbsUp = document.createElement('i')
     thumbsUp.setAttribute('class', 'fa fa-thumbs-o-up')    
 
@@ -107,9 +121,10 @@ function animatesRyu () {
 
     if (lastAnswer) {
         var winsLen = wins.length;
-        var WIN = Math.floor(winsLen*Math.random());
-        document.getElementById('ryu').src=wins[WIN];
-        var gif = wins[WIN].split('/').pop();
+        var INDEX = Math.floor(winsLen*Math.random());
+        document.getElementById('ryu').src=wins[INDEX];
+        document.getElementById('akuma').src=aloses[INDEX];
+        var gif = wins[INDEX].split('/').pop();
         var phrase = gif.split('.');
         phrase.pop();
         document.getElementById('ryu_says').innerHTML=phrase + '&emsp;';
@@ -117,9 +132,10 @@ function animatesRyu () {
     }
     else {
         var losesLen = loses.length;
-        var LOSE = Math.floor(losesLen*Math.random());
-        document.getElementById('ryu').src=loses[LOSE];
-        var gif = loses[LOSE].split('/').pop();
+        var INDEX = Math.floor(losesLen*Math.random());
+        document.getElementById('ryu').src=loses[INDEX];
+        document.getElementById('akuma').src=awins[INDEX];
+        var gif = loses[INDEX].split('/').pop();
         var phrase = gif.split('.');
         phrase.pop();
         document.getElementById('ryu_says').innerHTML=phrase + '&emsp;';
@@ -170,11 +186,11 @@ function ajaxSend(MsgClient){
                 results = createResultsDiv(quizzScore)
                 question = document.getElementById("question")
                 main.replaceChild(results, question)
-                animatesRyu(lastAnswer)
+                animatesChar(lastAnswer)
             }
             else {
                 var info = document.getElementById("info")
-                animatesRyu(lastAnswer)
+                animatesChar(lastAnswer)
                 document.getElementById("questionDiv").innerHTML = quizzQuestion
                 document.getElementById("questionProgression").innerHTML = quizzProgression
             }          

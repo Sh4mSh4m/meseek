@@ -346,7 +346,28 @@ header.masthead p {
   max-width: 100%;
 }
 
+#info {
+  background-image: url("../img/back_resized.png");
+  background-repeat: no-repeat;
+  background-position: center top;
+  height: 220px;
+
+}
+
 #loading {
   margin: 100px;
   display: none;
+}
+
+#ryu_says {
+ font-weight: bold;
+ color: #e51010;
+}
+#ryu {
+  padding-top: 50px;
+}
+#akuma {
+  padding-top: 42px;
+  -webkit-transform: scaleX(-1);
+  transform: scaleX(-1);
 }
