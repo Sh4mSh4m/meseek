@@ -25,9 +25,48 @@ function createResultsDiv (quizzScore) {
     resetLink.appendChild(resetPhrase)
 
     var ScoreTitle = document.createTextNode(quizzScore);
+    console.log(quizzScore)
     var resultScore = document.createElement('h4');
     resultScore.appendChild(ScoreTitle);
 
+    var gifV = ""
+    switch (Number(quizzScore)) {
+        case 100:
+            gifV = "/static/nadeshiko/img/scores/SPEECHLESS.gif";
+            break;
+        case 90:
+            gifV = "/static/nadeshiko/img/scores/AWESOME JOB.gif";
+            break;
+        case 80:
+            gifV = "/static/nadeshiko/img/scores/AMAZING.gif";
+            break;
+        case 70:
+            gifV = "/static/nadeshiko/img/scores/Alright.gif";
+            break;
+        case 60:
+            gifV = "/static/nadeshiko/img/scores/Mouais.gif";
+            break;
+        case 50:
+            gifV = "/static/nadeshiko/img/scores/Mehh.gif";
+            break;
+        default:
+            gifV = "/static/nadeshiko/img/scores/Essaie encore.gif";
+    }
+
+    var resultGif = document.createElement('img');
+    resultGif.setAttribute('style', "height: 300px");
+    resultGif.setAttribute('src', gifV);
+    var resultGifDiv = document.createElement('div')
+    resultGifDiv.appendChild(resultGif)
+
+    var tmp = gifV.split('/').pop();
+    var phrase = tmp.split('.');
+    phrase.pop();
+    var CatchPhrase = document.createTextNode(phrase);
+    var resultCatchPhrase = document.createElement('h4');
+    resultCatchPhrase.appendChild(CatchPhrase);
+
+    
     var ResultTitle = document.createTextNode("Vous avez terminé !!! Votre score est de: ");
     var resultTitle = document.createElement('h4');
     resultTitle.appendChild(ResultTitle);   
@@ -37,7 +76,10 @@ function createResultsDiv (quizzScore) {
     resultDivElt.setAttribute('id', "result");
     resultDivElt.appendChild(resultTitle);
     resultDivElt.appendChild(resultScore);
+    resultDivElt.appendChild(resultCatchPhrase);
+    resultDivElt.appendChild(resultGifDiv);
     resultDivElt.appendChild(resetLink);
+
     return resultDivElt;
 
 }
