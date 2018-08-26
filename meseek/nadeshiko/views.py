@@ -139,18 +139,18 @@ def upload(request):
         if form.is_valid():
             scan = form.save()
             # stupid way to collect
-            path2file = "." + "/media/" + str(scan.image)
+            path2file = "./media/" + str(scan.image)
             wordList = ocr(path2file) 
             rows = len(wordList)
             formToEdit = OCRTextForm(initial={'Type':'vocabulaire'}, wordList=wordList)  # dynamic form creation
-            print(formToEdit)
             return render(request, 'nadeshiko/simple_upload.html', {
             'scan': scan, 'wordList': wordList, 'rows': rows, 'formToEdit': formToEdit })
     elif request.method == 'POST':
         formToEdit = OCRTextForm(request.POST, wordList=wordList)
         if formToEdit.is_valid():
             voc_type = formToEdit.cleaned_data['Type'] 
-            level = formToEdit.cleaned_data['Level'] 
+            level = formToEdit.cleaned_data['Level']
+            summary = []
             for key, value in request.POST.items():
                 if "Mot" in key and value != '':
                     word=Vocabulary(voc_jp=value.split('//')[0])
@@ -158,7 +158,8 @@ def upload(request):
                     word.level=level
                     word.voc_type=voc_type
                     word.save()
-            return JsonResponse({'message':"ok"})
+                    summary.append(word)
+            return render(request, 'nadeshiko/upload_recap.html', {'summary': summary})
     else:
         form = LessonScanForm()
         return render(request, 'nadeshiko/simple_upload.html', {'form': form})

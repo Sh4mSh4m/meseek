@@ -409,15 +409,20 @@ class seleniumTestsLoggedIn(StaticLiveServerTestCase):
         self.selenium.find_element_by_xpath('//div[contains(text(), "Votre scan est en cours de chargement")]')
         # Form is returned and an image is loaded
         self.selenium.find_element_by_xpath('//p[contains(text(), "Le fichier a bien été chargé")]')
-        # Staff fills in first field
+        # Staff fills in fields
         # Default type is selected now
         time.sleep(3)
         self.selenium.find_element_by_xpath('//input[@id="id_Type_0"]').click()
-        self.selenium.find_element_by_xpath('//input[@id="id_Mot0"]').send_keys("わたしは//Je")
+        self.selenium.find_element_by_xpath('//input[@id="id_Mot0"]').clear()
+        self.selenium.find_element_by_xpath('//input[@id="id_Mot0"]').send_keys("わたし//je")
+        self.selenium.find_element_by_xpath('//input[@id="id_Mot1"]').clear()
+        self.selenium.find_element_by_xpath('//input[@id="id_Mot1"]').send_keys("あなた//vous")
+        self.selenium.find_element_by_xpath('//input[@id="id_Mot2"]').clear()
+        self.selenium.find_element_by_xpath('//input[@id="id_Mot2"]').send_keys("あの ひど//il")
         # Staff sends form
         self.selenium.find_element_by_xpath('//button[contains(text(), "Upload")]').click()
         # Staff receives JSON info
-        self.selenium.find_element_by_xpath('//pre[contains(text(), "message")]')
+        self.selenium.find_element_by_xpath('//li[contains(text(), "わたし")]')
 
         
         
