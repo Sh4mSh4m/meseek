@@ -99,24 +99,32 @@ var loses = [
 ];
 
 function animatesRyu () {
+    var thumbsUp = document.createElement('i')
+    thumbsUp.setAttribute('class', 'fa fa-thumbs-o-up')    
+
+    var thumbsDown = document.createElement('i')
+    thumbsDown.setAttribute('class', 'fa fa-thumbs-o-down')
+
     if (lastAnswer) {
-        var winsLen = wins.length
-        var WIN = Math.floor(winsLen*Math.random())
+        var winsLen = wins.length;
+        var WIN = Math.floor(winsLen*Math.random());
         document.getElementById('ryu').src=wins[WIN];
-        var gif = wins[WIN].split('/').pop()
-        var phrase = gif.split('.')
-        phrase.pop()
-        document.getElementById('ryu_says').innerHTML=phrase;
+        var gif = wins[WIN].split('/').pop();
+        var phrase = gif.split('.');
+        phrase.pop();
+        document.getElementById('ryu_says').innerHTML=phrase + '&emsp;';
+        document.getElementById('ryu_says').appendChild(thumbsUp);
     }
     else {
-        var losesLen = loses.length
-        var LOSE = Math.floor(losesLen*Math.random())
+        var losesLen = loses.length;
+        var LOSE = Math.floor(losesLen*Math.random());
         document.getElementById('ryu').src=loses[LOSE];
-        var gif = loses[LOSE].split('/').pop()
-        var phrase = gif.split('.')
-        phrase.pop()
-        document.getElementById('ryu_says').innerHTML=phrase;
-    }
+        var gif = loses[LOSE].split('/').pop();
+        var phrase = gif.split('.');
+        phrase.pop();
+        document.getElementById('ryu_says').innerHTML=phrase + '&emsp;';
+        document.getElementById('ryu_says').appendChild(thumbsDown);
+      }
 }
 
 
