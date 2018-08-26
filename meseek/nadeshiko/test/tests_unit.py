@@ -33,7 +33,7 @@ class AwebClientTestCaseNoLogin(TestCase):
     Test suite for the django server, verifying views return expected templates
     """
     @tag('guest')
-    def test_index_not_loggedin(self):
+    def test_1_index_not_loggedin(self):
         """
         Without being logged in, user has to register or create an account
         """
@@ -44,7 +44,7 @@ class AwebClientTestCaseNoLogin(TestCase):
         self.assertContains(response, "inscrivez-vous")
 
     @tag('guest')
-    def test_hiragana_not_loggedin(self):
+    def test_2_hiragana_not_loggedin(self):
         """
         Without being logged in, user has to register or create an account
         """
@@ -53,7 +53,7 @@ class AwebClientTestCaseNoLogin(TestCase):
         self.assertContains(response, "Hiraganas")
 
     @tag('guest')
-    def test_katakanas_not_loggedin(self):
+    def test_3_katakanas_not_loggedin(self):
         """
         Without being logged in, user has to register or create an account
         """
@@ -62,7 +62,7 @@ class AwebClientTestCaseNoLogin(TestCase):
         self.assertContains(response, "Katakanas")
 
     @tag('guest')
-    def test_quizz_access_not_log(self):
+    def test_4_quizz_access_not_log(self):
         """
         Without being logged in, user attempts to reach quizz page
         He is invited to go home
@@ -72,7 +72,7 @@ class AwebClientTestCaseNoLogin(TestCase):
         self.assertContains(response, "Désolé vous n'êtes pas authentifié")
 
     @tag('guest')
-    def test_quizz_access_user_not_log(self):
+    def test_5_quizz_access_user_not_log(self):
         """
         Without being logged in, user attempts to reach quizz page
         He is invited to go home
@@ -81,8 +81,19 @@ class AwebClientTestCaseNoLogin(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, "Désolé vous n'êtes pas authentifié")
 
+    @tag('guest')
+    def test_6_my_account_user_not_log(self):
+        """
+        Without being logged in, user attempts to reach quizz page
+        He is invited to go home
+        """
+        response = self.client.get('/nadeshiko/my_account/7')
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, "Désolé vous n'êtes pas authentifié")
+
+
     @tag('staff')
-    def test_upload(self):
+    def test_staff_upload_not_log(self):
         """
         Without being logged in, or user not staff
         """
@@ -111,6 +122,9 @@ class AwebClientTestCaseLoggedIn(TestCase):
         response = self.c.get('/nadeshiko/my_account/{}'.format(self.user.id))
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, "temporary@gmail.com")
+        self.assertContains(response, "niveau")
+        self.assertContains(response, "débutant")
+
 
     @tag('user')
     def test_2_index_loggedin(self):

@@ -6,6 +6,8 @@
       <div class="container-fluid p-0">
         <div class="h-25 row" style="background-image: url('{% static 'nadeshiko/img/login.jpg' %}'); background-repeat: no-repeat; background-size: 100%; filter: brightness(75%)">
           <div class="container h100">
+          {% if user.is_authenticated %}
+
             <div class="row h-100 justify-content-center align-items-center">
               <h1 style="color: #FFFFFF">Ahoy <BR> {{ user.first_name }} {{ user.last_name }} </h1>
             </div>
@@ -17,9 +19,21 @@
               <div class="col-md-6 justify-content-center align-items-center">
                 <ul>
                   <li>Mon email: {{ user.email }}</li>
+                  {% for level, score in quizz.scoreSheet.items %}
+                    {% if score  > 20 %}
+                    <li>niveau {{level}}: moyenne {{score}}</li>
+                    {% elif 20 >= score > 0 and score != 0 %}  
+                    <li>niveau {{level}}: débutant </li>
+                    {% endif %}
+                  {% endfor %}
                 </ul>  
               </div>  
             </div>
+          {% else %}
+            <h5 class="text-faded mb-4">Désolé vous n'êtes pas authentifié !</h5>
+            <p><a href="{% url 'nadeshiko:index' %}">Return to home</a></p>
+          </div>
+          {% endif %}
           </div>  
         </div>
       </div>

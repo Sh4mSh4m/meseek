@@ -132,8 +132,12 @@ def my_account(request, user_id):
     """
     Simple account information view
     """
-    user = get_object_or_404(User, pk=user_id)
-    return render(request, 'nadeshiko/my_account.html', {'user': user})
+    if request.user.is_authenticated:
+        user = request.user
+        quizz = initiatesQuizz(user)
+        return render(request, 'nadeshiko/my_account.html', {'user': user, 'quizz': quizz})
+    else:
+        return render(request, 'nadeshiko/my_account.html')
 
 def upload(request):
     """
