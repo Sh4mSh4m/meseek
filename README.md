@@ -1,4 +1,4 @@
-# meseek
+# Meseek
 Meseek is a portal to access both a bot and a japanese quizz application. This portal is my final submission to the OpenClassRooms Python application developpers programme.
 
 ## Meseek Bot
