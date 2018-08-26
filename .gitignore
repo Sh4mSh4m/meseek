@@ -14,6 +14,10 @@ meseek/nadeshiko/__pycache__/level.cpython-36.pyc
 meseek/nadeshiko/__pycache__/quizz.cpython-36.pyc
 meseek/nadeshiko/__pycache__/tests.cpython-36.pyc
 meseek/nadeshiko/level.py
+meseek/csv/
+meseek/media/
+meseek/nadeshiko/__pycache__/
+meseek/nadeshiko/migrations/
 meseek/nadeshiko/migrations/0001_initial.py
 meseek/nadeshiko/migrations/0002_hiragana_new.py
 meseek/nadeshiko/migrations/0003_remove_hiragana_new.py
@@ -24,3 +28,4 @@ meseek/nadeshiko/static/nadeshiko/js/req_ref.js
 meseek/nadeshiko/static/nadeshiko/package-lockTE.json
 meseek/nadeshiko/static/nadeshiko/packageTE.json
 meseek/nadeshiko/templates/nadeshiko/quizz_ref.html
+meseek/test-lesson1-2.png
