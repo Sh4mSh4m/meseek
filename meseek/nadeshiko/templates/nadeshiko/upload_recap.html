@@ -1,0 +1,35 @@
+{% extends 'nadeshiko/base.html' %}
+
+{% load static %}
+
+{% block content %}
+    <section>
+      <div id="upload_scan" class="container-fluid my-auto">
+          <div class="mx-auto">
+            <h1 class="text-uppercase">
+              <strong>Administration- upload de scans</strong>
+            </h1>
+            <hr>
+          </div>
+        {% if user.is_staff %}
+          <div>
+            <p>Vous avez ajouté les mots suivants:</p>
+            <ul>
+            {% for word in summary %}
+            <li>JP:{{ word.voc_jp }} FR:{{ word.voc_fr }} de niveau {{ word.level }}</li>
+            {% endfor %}
+            </ul>
+          </div>
+          <p><a href="{% url 'nadeshiko:index' %}">Return to home</a></p>
+        {% else %}
+          <p>Sorry, this is a staff page only.</p>
+          <p><a href="{% url 'nadeshiko:index' %}">Return to home</a></p>
+        {% endif %}
+      </div>
+    </section>
+
+{% endblock %}
+
+{% block sidebar %}
+    <script src="{% static 'nadeshiko/js/upload.js' %}"></script>
+{% endblock %}
