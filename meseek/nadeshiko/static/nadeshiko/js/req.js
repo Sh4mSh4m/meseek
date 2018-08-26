@@ -54,7 +54,7 @@ function createResultsDiv (quizzScore) {
     }
 
     var resultGif = document.createElement('img');
-//    resultGif.setAttribute('style', "height: 300px");
+    resultGif.setAttribute('style', "width: 450px");
     resultGif.setAttribute('src', gifV);
     var resultGifDiv = document.createElement('div')
     resultGifDiv.appendChild(resultGif)
@@ -72,7 +72,7 @@ function createResultsDiv (quizzScore) {
     resultTitle.appendChild(ResultTitle);   
 
     var resultDivElt = document.createElement('div');
-    resultDivElt.setAttribute('class', 'col-md-9 mx-auto text-center');
+    resultDivElt.setAttribute('class', 'col-md-7 mx-auto text-center');
     resultDivElt.setAttribute('id', "result");
     resultDivElt.appendChild(resultTitle);
     resultDivElt.appendChild(resultScore);
