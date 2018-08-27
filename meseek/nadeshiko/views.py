@@ -149,7 +149,7 @@ def upload(request):
         if form.is_valid():
             scan = form.save()
             # stupid way to collect
-            path2file = "./media/" + str(scan.image)
+            path2file = "." + "/media/" + str(scan.image)
             wordList = ocr(path2file) 
             rows = len(wordList)
             formToEdit = OCRTextForm(initial={'Type':'vocabulaire'}, wordList=wordList)  # dynamic form creation

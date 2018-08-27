@@ -155,9 +155,6 @@ class seleniumTestsStaff(StaticLiveServerTestCase):
         cls.staff.is_staff = True
         cls.staff.save()
         cls.userInfo = UserJapaneseLevel.objects.create(pk=cls.user.id, user=cls.user)
-        for char in HIR_char_list:
-            create_entry_Hiragana(**char)
-
 
     @classmethod
     def tearDownClass(cls):
@@ -165,7 +162,7 @@ class seleniumTestsStaff(StaticLiveServerTestCase):
         super().tearDownClass()
 
 
-    @tag('selenium, staff')
+    @tag('selenium', 'staff', 'zetest')
     def test_sel_staff_upload(self):
         """
         Integration test, 
@@ -193,7 +190,6 @@ class seleniumTestsStaff(StaticLiveServerTestCase):
         self.selenium.find_element_by_xpath('//p[contains(text(), "Le fichier a bien été chargé")]')
         # Staff fills in fields
         # Default type is selected now
-        time.sleep(3)
         self.selenium.find_element_by_xpath('//input[@id="id_Type_0"]').click()
         self.selenium.find_element_by_xpath('//input[@id="id_Mot0"]').clear()
         self.selenium.find_element_by_xpath('//input[@id="id_Mot0"]').send_keys("わたし//je")
