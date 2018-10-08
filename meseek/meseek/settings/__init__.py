@@ -34,6 +34,7 @@ INSTALLED_APPS = [
     'meseek',
     'chat',
     'nadeshiko',
+    'handmade',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',

@@ -25,6 +25,7 @@ urlpatterns = [
     path('signup/', views.signup, name='signup'),    
     path('chat/', include('chat.urls')),
     path('nadeshiko/', include('nadeshiko.urls')),
+    path('handmade/', include('handmade.urls')),
     path('adminback/', admin.site.urls),
 ]
 

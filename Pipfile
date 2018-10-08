@@ -12,6 +12,8 @@ selenium = "*"
 requests = "*"
 pytesseract = "*"
 coverage = "*"
+pipfile = "*"
+Pipfile = "*"
 
 
 [dev-packages]
