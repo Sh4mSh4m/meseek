@@ -25,7 +25,7 @@ SECRET_KEY = 'fsqkjfdqm039128£*%/a9%jai'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['127.0.0.1']
 
 
 # Application definition
@@ -131,3 +131,6 @@ LOGOUT_REDIRECT_URL = 'nadeshiko:index'
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+# ligne ajoutée pour le debug
+if DEBUG:
+    STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')

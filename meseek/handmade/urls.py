@@ -8,4 +8,5 @@ app_name = 'handmade'
 urlpatterns = [
     # Index ex: /chat/
     path('', views.index, name='index'),
+    path('referee', views.referee, name='referee'),
 ]

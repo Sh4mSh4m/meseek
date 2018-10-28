@@ -13,8 +13,8 @@ requests = "*"
 pytesseract = "*"
 coverage = "*"
 pipfile = "*"
-Pipfile = "*"
 
 
 [dev-packages]
 
+pylint = "*"
